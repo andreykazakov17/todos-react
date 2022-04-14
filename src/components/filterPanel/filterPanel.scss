@@ -1,0 +1,49 @@
+.todo-filters {
+	visibility: hidden;
+    height: 2rem;
+    width: 30rem;
+    margin: 0 auto;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+	&-total {
+		font-size: 14px;
+    	width: 100px;
+	}
+	&-list {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		list-style: none;
+		padding-left: 0;
+		margin: 0;
+	}
+	&-item {
+		font-size: 12px;
+		width: 60px;
+		height: 2rem;
+		border: none;
+		background: #fff;
+		cursor: pointer;
+	}
+	&-clear {
+		font-size: 12px;
+		width: 150px;
+		border: none;
+		border-radius: 15px;
+		background: #fff;
+	}
+}
+
+.active-btn {
+	color: rgb(0, 116, 0);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.visible {
+	visibility: visible;
+}

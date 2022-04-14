@@ -1,0 +1,71 @@
+.todo-item {
+	position: relative;
+    padding: 0rem 0.5rem;
+    height: auto;
+    width: 25rem;
+    padding: 1rem 1rem;
+    margin: 0.5rem;
+    background: white;
+    color: black;
+    font-size: 18px;
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 25px;
+    word-break: break-all;
+    transition: all 0.5s ease;
+	&-complete-btn {
+		background: #fff;
+		color: rgb(105, 105, 105);
+		height: 50px;
+		width: 50px;
+		border: none;
+		cursor: pointer;
+	}
+	&-wrapper-text {
+		display: block;
+		line-height: 35px;
+		font-size: 20px;
+		color: rgb(0, 0, 0);
+		cursor: pointer;
+		min-width: 260px;
+		border: none;
+		user-select: none;
+	}
+	&-wrapper-text {
+		display: block;
+		line-height: 35px;
+		font-size: 20px;
+		color: rgb(0, 0, 0);
+		cursor: pointer;
+		min-width: 260px;
+		border: none;
+		user-select: none;
+	}
+	&-wrapper-text-hidden {
+		display: none;
+	}
+	&-trash-btn {
+		position: absolute;
+		right: 16px;
+		background: #fff;
+		color: red;
+		height: 50px;
+		width: 50px;
+		border: none;
+		cursor: pointer;
+	}
+}
+
+.fa-circle-check, .fa-circle-xmark {
+    pointer-events: none;
+}
+
+.checked {
+    color: green;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
