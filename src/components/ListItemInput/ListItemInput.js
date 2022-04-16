@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 
-const Variant = {
-	PRIMARY: "primary",
-	SECONDARY: "secondary"
-}
+// const Variant = {
+// 	PRIMARY: "primary",
+// 	SECONDARY: "secondary"
+// }
 
-const mapVariantToClass = {
-	[Variant.PRIMARY]: "input-primary",
-	[Variant.SECONDARY]: "input-secondary"
-}
+// const mapVariantToClass = {
+// 	[Variant.PRIMARY]: "input-primary",
+// 	[Variant.SECONDARY]: "input-secondary"
+// }
 
 class ListItemInput extends Component {
 	constructor(props) {
@@ -27,8 +27,11 @@ class ListItemInput extends Component {
 			<input
 				ref={this.elemRef}
 				type="text" defaultValue={text} 
-				className={`list-item-input ${className} ${variant ? mapVariantToClass[variant] : ""}`}
-				onChange={(e) => updateTodo(id, e.target.value)}>
+				className={`list-item-input ${className}`}
+				onBlur={() => this.props.setUnactiveInput()}
+				onChange={(e) => {
+					updateTodo(id, e.target.value);
+				}}>
 			</input>
 		)
 	}
@@ -38,5 +41,4 @@ class ListItemInput extends Component {
 
 export default ListItemInput;
 
-
-//autoFocus={autoFocus ? true : false} 
+//${variant ? mapVariantToClass[variant] : ""}

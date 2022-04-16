@@ -13,7 +13,13 @@ class TodoListItem extends Component {
 		}
 	}
 
-	setActiveInput() {
+	setUnactiveInput = () => {
+		this.setState({
+			isActiveInput: false
+		});
+	}
+
+	setActiveInput = () => {
 		this.setState({
 			isActiveInput: true
 		});
@@ -39,7 +45,8 @@ class TodoListItem extends Component {
 								id={id} 
 								text={text} 
 								className="todo-item-wrapper-text"
-								updateTodo={updateTodo}/>
+								updateTodo={updateTodo}
+								setUnactiveInput={this.setUnactiveInput}/>
 						)
 					}
 				</div>
