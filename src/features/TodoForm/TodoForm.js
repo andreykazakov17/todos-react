@@ -1,5 +1,8 @@
 import { Component } from 'react';
-import './appForm.scss';
+
+import Button from '../../components/Button/Button';
+
+import './TodoForm.scss';
 
 class AppForm extends Component {
 	constructor(props) {
@@ -27,6 +30,8 @@ class AppForm extends Component {
 	render() {
 
 		const { text } = this.state;
+		const { toggleAllTodos } = this.props;
+
 		return(
 			<form 
 				className='todo-form' 
@@ -37,12 +42,14 @@ class AppForm extends Component {
 					placeholder="What needs to be done?"
 					value={text}
 					onChange={this.onValueChange}/>
-				<button className="todo-form-submit-btn" type="submit">
-					<i className="fas fa-plus-square"></i>
-				</button>
-				<button className="todo-form-complete-all" data-complete-all="complete-all">
-					<i className="fa-solid fa-arrow-down"></i>
-				</button>
+				<Button 
+					className="todo-form-submit-btn"
+					children={<i className="fas fa-plus-square"></i>}
+					type="submit"/>
+				<Button 
+					className="todo-form-complete-all"
+					children={<i className="fa-solid fa-arrow-down"></i>}
+					onClick={() => toggleAllTodos()}/>
 			</form>
 		)
 	}

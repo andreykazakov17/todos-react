@@ -18,7 +18,7 @@
 		justify-content: space-between;
 		align-items: center;
 		list-style: none;
-		padding-left: 0;
+		padding: 0rem;
 		margin: 0;
 	}
 	&-item {
@@ -31,7 +31,9 @@
 	}
 	&-clear {
 		font-size: 12px;
-		width: 150px;
+		width: 150px;;
+		padding: 0rem;
+		height: 20px;
 		border: none;
 		border-radius: 15px;
 		background: #fff;

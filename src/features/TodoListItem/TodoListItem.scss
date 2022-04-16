@@ -15,22 +15,8 @@
     word-break: break-all;
     transition: all 0.5s ease;
 	&-complete-btn {
-		background: #fff;
+		padding: 0rem;
 		color: rgb(105, 105, 105);
-		height: 50px;
-		width: 50px;
-		border: none;
-		cursor: pointer;
-	}
-	&-wrapper-text {
-		display: block;
-		line-height: 35px;
-		font-size: 20px;
-		color: rgb(0, 0, 0);
-		cursor: pointer;
-		min-width: 260px;
-		border: none;
-		user-select: none;
 	}
 	&-wrapper-text {
 		display: block;
@@ -48,12 +34,7 @@
 	&-trash-btn {
 		position: absolute;
 		right: 16px;
-		background: #fff;
 		color: red;
-		height: 50px;
-		width: 50px;
-		border: none;
-		cursor: pointer;
 	}
 }
 
