@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import "./Input.scss";
+import './Input.scss';
 
 const variant = {
-  PRIMARY: "primary",
-  SECONDARY: "secondary",
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
 };
 
 const mapVariantToClass = {
-  [variant.PRIMARY]: "primary",
-  [variant.SECONDARY]: "secondary",
+  [variant.PRIMARY]: 'primary',
+  [variant.SECONDARY]: 'secondary',
 };
 
 class ListItemInput extends Component {
@@ -19,7 +19,6 @@ class ListItemInput extends Component {
   }
 
   componentDidMount() {
-
     const { isFocus } = this.props;
 
     if (isFocus) {
@@ -28,7 +27,7 @@ class ListItemInput extends Component {
   }
 
   render() {
-    const { id, placeholder, value, defaultValue, onChange, onBlur } = this.props;
+    const { id, placeholder, value, defaultValue, variant, onChange, onBlur } = this.props;
 
     return (
       <input
@@ -37,14 +36,14 @@ class ListItemInput extends Component {
         placeholder={placeholder}
         value={value}
         defaultValue={defaultValue}
-        className={`todo-input ${variant ? mapVariantToClass[variant] : ""}`}
+        className={`todo-input ${variant ? mapVariantToClass[variant] : ''}`}
         onBlur={() => {
-          if (variant === "secondary") {
+          if (variant === 'secondary') {
             onBlur();
           }
         }}
         onChange={(e) => {
-          if (variant === "secondary") {
+          if (variant === 'secondary') {
             onChange(id, e.target.value);
           }
           onChange(e);
