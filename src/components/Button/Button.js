@@ -1,15 +1,13 @@
-import './Button.scss';
+import React from 'react';
 
-const Button = ({className = "", children, type = "",onClick}) => {
+import "./Button.scss";
 
-	return(
-		<button
-			type={type} 
-			className={`action-btn ${className}`}
-			onClick={onClick}>
-				{children ? children : null}
-		</button>
-	)
+function Button({ className = "", children, onClick }) {
+  return (
+    <button type="button" className={`action-btn ${className}`} onClick={onClick}>
+      {children}
+    </button>
+  );
 }
 
 export default Button;

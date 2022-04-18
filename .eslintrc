@@ -1,0 +1,30 @@
+{
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": false,
+        "codeFrame": false,
+        "requireConfigFile": false,
+        "babelOptions": {
+            "presets": ["@babel/preset-react"]
+         }
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "extends": ["airbnb", "prettier"],
+    "env": {
+        "browser": true,
+        "jest": true,
+        "es2021": true
+    },
+    "rules": {
+        "max-len": ["error", {"code": 100}],
+        "prefer-promise-reject-errors": ["off"],
+        "react/jsx-filename-extension": ["off"],
+        "react/prop-types": ["warn"],
+        "no-return-assign": ["off"]
+  }
+}

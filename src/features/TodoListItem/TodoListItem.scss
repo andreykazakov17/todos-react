@@ -14,19 +14,18 @@
     border-radius: 25px;
     word-break: break-all;
     transition: all 0.5s ease;
-	&-complete-btn {
-		padding: 0rem;
-		color: rgb(105, 105, 105);
-	}
-	&-wrapper-text {
+	&-wrapper {
 		display: block;
 		line-height: 35px;
-		font-size: 20px;
 		color: rgb(0, 0, 0);
 		cursor: pointer;
 		min-width: 260px;
 		border: none;
 		user-select: none;
+	}
+	&-complete-btn {
+		padding: 0rem;
+		color: rgb(105, 105, 105);
 	}
 	&-wrapper-text-hidden {
 		display: none;

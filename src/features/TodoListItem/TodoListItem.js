@@ -1,63 +1,74 @@
-import { Component } from 'react';
+import React, { Component } from "react";
 
-import Button from '../../components/Button/Button';
-import ListItemInput from '../../components/ListItemInput/ListItemInput';
+import Button from "../../components/Button/Button";
+import Input from "../../components/Input/Input";
 
-import './TodoListItem.scss';
+import "./TodoListItem.scss";
 
 class TodoListItem extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isActiveInput: false
-		}
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      isActiveInput: false,
+    };
+  }
 
-	setUnactiveInput = () => {
-		this.setState({
-			isActiveInput: false
-		});
-	}
+  hideInput = () => {
+    this.setState({
+      isActiveInput: false,
+    });
+  };
 
-	setActiveInput = () => {
-		this.setState({
-			isActiveInput: true
-		});
-	}
+  showInput = () => {
+    this.setState({
+      isActiveInput: true,
+    });
+  };
 
-	render() {
-		const { id, text, completed, onCheck, onDelete, updateTodo } = this.props;
+  // toggleInputVisibility = () => {
+	// this.setState({
+	// 	isActiveInput: !!this.state.isActiveInput
+	// });
+  // }
 
-		return(
-			<li key={id} data-id={id} className={completed ? "todo-item checked completed" : "todo-item"}>
-				<Button 
-					className="todo-item-complete-btn"
-					children={<i className="fa-solid fa-circle-check"></i>}
-					onClick={onCheck} />
-				<div className="todo-item-wrapper">
-					{
-						!this.state.isActiveInput ? (
-							<div
-								onDoubleClick={() => this.setActiveInput()}
-								className="todo-item-wrapper-text">{text}</div>
-						) : (
-							<ListItemInput
-								id={id} 
-								text={text} 
-								className="todo-item-wrapper-text"
-								updateTodo={updateTodo}
-								setUnactiveInput={this.setUnactiveInput}/>
-						)
-					}
-				</div>
-				<Button
-					className="todo-item-trash-btn"
-					children={<i className="fa-solid fa-circle-xmark"></i>}
-					onClick={onDelete}
-				/>
-			</li>
-		)
-	}
+  render() {
+    const { isActiveInput } = this.state;
+    const { id, text, completed, onCheck, onDelete, updateTodo } = this.props;
+
+    return (
+      <li key={id} data-id={id} className={completed ? "todo-item checked completed" : "todo-item"}>
+        <Button
+          className="todo-item-complete-btn"
+          onClick={onCheck}
+        >
+          <i className="fa-solid fa-circle-check" />
+        </Button>
+        <div className="todo-item-wrapper">
+          {!isActiveInput ? (
+            <div onDoubleClick={() => this.showInput()} className="todo-item-wrapper-text">
+              {text}
+            </div>
+          ) : (
+            <Input
+              id={id}
+              text={text}
+              variant="secondary"
+              onChange={updateTodo}
+              defaultValue={text}
+              isFocus
+              onBlur={this.hideInput}
+            />
+          )}
+        </div>
+        <Button
+          className="todo-item-trash-btn"
+          onClick={onDelete}
+        >
+          <i className="fa-solid fa-circle-xmark" />
+        </Button>
+      </li>
+    );
+  }
 }
 
 export default TodoListItem;
