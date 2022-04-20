@@ -1,64 +1,53 @@
-import React from "react";
+import React, { useState } from 'react';
+import styled from '@emotion/styled';
 
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
+import ActionButton from '../../components/Button/Button';
+import TodoInput from '../../components/Input/Input';
 
-import "./TodoForm.scss";
+import './TodoForm.scss';
 
-class AppForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "",
-    };
-  }
+const FormInput = styled(TodoInput)`
+  border-radius: 10px;
+  width: 250px;
+`;
 
-  handleInputChange = (e) => {
-    this.setState({
-      text: e.target.value,
-    });
+const FormPanelBtn = styled(ActionButton)`
+  height: 50px;
+  width: 80px;
+  border-radius: 10px;
+  font-size: 12px;
+`;
+
+const AppForm = ({ onAddTodo, toggleAllTodos }) => {
+  const [inputText, setInputText] = useState('');
+
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
   };
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    const { text } = this.state;
-    const { onAddTodo } = this.props;
-
-    onAddTodo(text);
-    this.setState({
-      text: "",
-    });
+    onAddTodo(inputText);
+    setInputText('');
   };
 
-  render() {
-    const { text } = this.state;
-    const { toggleAllTodos } = this.props;
-
-    return (
-      <form className="todo-form" onSubmit={this.onSubmit}>
-        <Input
-          type="text"
-          variant="primary"
-          placeholder="What needs to be done?"
-          value={text}
-          onChange={this.handleInputChange}
-        />
-        <Button
-          className="todo-form-submit-btn"
-          type="submit"
-        >
-          <i className="fas fa-plus-square" />
-        </Button>
-        <Button
-          className="todo-form-complete-all"
-          onClick={() => toggleAllTodos()}
-        >
-          <i className="fa-solid fa-arrow-down" />
-        </Button>
-      </form>
-    );
-  }
-}
+  return (
+    <form className="todo-form" onSubmit={(e) => onSubmit(e)}>
+      <FormInput
+        type="text"
+        value={inputText}
+        placeholder="What needs to be done?"
+        onChange={(e) => handleInputChange(e)}
+      />
+      <FormPanelBtn type="submit" variant="contained" color="success">
+        Add
+      </FormPanelBtn>
+      <FormPanelBtn color="secondary" onClick={toggleAllTodos}>
+        Toggle
+      </FormPanelBtn>
+    </form>
+  );
+};
 
 export default AppForm;

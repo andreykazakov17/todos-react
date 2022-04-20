@@ -1,57 +1,41 @@
-import React from "react";
+import React, { useState } from 'react';
 
-import TodoForm from "../../features/TodoForm/TodoForm";
-import TodoList from "../../features/TodoList/TodoList";
-import FilterPanel from "../../features/FilterPanel/FilterPanel";
+import TodoForm from '../../features/TodoForm/TodoForm';
+import TodoList from '../../features/TodoList/TodoList';
+import FilterPanel from '../../features/FilterPanel/FilterPanel';
 
-import "./Todo.scss";
+import './Todo.scss';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todosArr: [],
-      filter: "All",
-    };
-  }
+const App = () => {
+  const [todosArr, updateTodosArr] = useState([]);
+  const [filter, setFilter] = useState('All');
 
-  checkTodo = (id) => {
-    this.setState(({ todosArr }) => ({
-        todosArr: todosArr.map((item) =>
-          item.id === id ? { ...item, completed: !item.completed } : item
-        ),
-      }));
+  const checkTodo = (id) => {
+    updateTodosArr(
+      todosArr.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)),
+    );
   };
 
-  deleteTodo = (id) => {
-    this.setState(({ todosArr }) => ({
-        todosArr: todosArr.filter((todo) => todo.id !== id),
-      }));
+  const deleteTodo = (id) => {
+    updateTodosArr(todosArr.filter((todo) => todo.id !== id));
   };
 
-  toggleAllTodos = () => {
-    const { todosArr } = this.state;
-
+  const toggleAllTodos = () => {
     const everyUnchecked = todosArr.every((item) => !item.completed);
     const someChecked = todosArr.some((item) => item.completed);
     const everyChecked = todosArr.every((item) => item.completed);
 
     if (everyChecked) {
-      this.setState(() => ({
-          todosArr: todosArr.map((item) => ({ ...item, completed: false })),
-        }));
+      updateTodosArr(todosArr.map((item) => ({ ...item, completed: false })));
       return;
     }
 
     if (everyUnchecked || someChecked) {
-      this.setState(() => ({
-          todosArr: todosArr.map((item) => ({ ...item, completed: true })),
-        }));
-      
+      updateTodosArr(todosArr.map((item) => ({ ...item, completed: true })));
     }
   };
 
-  onAddTodo = (text) => {
+  const onAddTodo = (text) => {
     if (!text) return;
 
     const newTodo = {
@@ -60,56 +44,47 @@ class App extends React.Component {
       id: new Date().getTime(),
     };
 
-    this.setState(({ todosArr }) => ({ todosArr: [...todosArr, newTodo] }));
+    updateTodosArr([...todosArr, newTodo]);
   };
 
-  updateTodo = (id, text) => {
-    this.setState(({ todosArr }) => ({
-      todosArr: todosArr.map((item) => {
+  const updateTodo = (id, text) => {
+    updateTodosArr(
+      todosArr.map((item) => {
         if (item.id === id) {
           return { ...item, text };
         }
         return item;
       }),
-    }));
-  };
-
-  setActiveFilter = (value) => {
-    this.setState({
-      filter: value,
-    });
-  };
-
-  clearCompleted = () => {
-    this.setState(({ todosArr }) => ({ todosArr: todosArr.filter((item) => !item.completed) }));
-  };
-
-  render() {
-    const { todosArr, filter } = this.state;
-
-    return (
-      <div className="todos-body">
-        <h1 className="todos-title">todos</h1>
-        <TodoForm 
-          onAddTodo={this.onAddTodo} 
-          toggleAllTodos={this.toggleAllTodos} />
-        <TodoList
-          todosArr={todosArr}
-          filter={filter}
-          onCheck={this.checkTodo}
-          onDelete={this.deleteTodo}
-          updateTodo={this.updateTodo}
-        />
-        <FilterPanel
-          total={this.countTodos}
-          todosArr={todosArr}
-          activeFilter={filter}
-          onFilters={this.setActiveFilter}
-          clearCompleted={this.clearCompleted}
-        />
-      </div>
     );
-  }
-}
+  };
+
+  const setActiveFilter = (value) => {
+    setFilter(value);
+  };
+
+  const clearCompleted = () => {
+    updateTodosArr(todosArr.filter((item) => !item.completed));
+  };
+
+  return (
+    <div className="todos-body">
+      <h1 className="todos-title">todos</h1>
+      <TodoForm onAddTodo={onAddTodo} toggleAllTodos={toggleAllTodos} />
+      <TodoList
+        todosArr={todosArr}
+        filter={filter}
+        onCheck={checkTodo}
+        onDelete={deleteTodo}
+        updateTodo={updateTodo}
+      />
+      <FilterPanel
+        todosArr={todosArr}
+        activeFilter={filter}
+        onFilters={setActiveFilter}
+        clearCompleted={clearCompleted}
+      />
+    </div>
+  );
+};
 
 export default App;

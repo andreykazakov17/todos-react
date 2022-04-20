@@ -1,11 +1,18 @@
 import React from 'react';
+import Button from '@mui/material/Button';
+import styled from '@emotion/styled';
 
-import './Button.scss';
+const StyledButton = styled(Button)`
+  min-width: 80px;
+  font-size: 18px;
+  cursor: pointer;
+  color: ${(props) => props.color};
+`;
 
-const Button = ({ className = '', children, onClick }) => (
-  <button type="button" className={`action-btn ${className}`} onClick={onClick}>
+const ActionButton = ({ variant, color, className, children, onClick }) => (
+  <StyledButton variant={variant} color={color} className={className} onClick={onClick}>
     {children}
-  </button>
+  </StyledButton>
 );
 
-export default Button;
+export default ActionButton;
