@@ -5,7 +5,42 @@ import Paper from '@mui/material/Paper';
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
 
-import './TodoListItem.scss';
+const ListItem = styled.li`
+  position: relative;
+  padding: 0rem 0.5rem;
+  height: auto;
+  width: 25rem;
+  margin: 0.5rem;
+  background: white;
+  color: black;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 25px;
+  border-color: 2e7d32;
+  border-width: 1px;
+  word-break: break-all;
+  transition: all 0.5s ease;
+  ${(props) =>
+    props.completed
+      ? 'text-decoration: line-through;  opacity: 0.3; color: green;'
+      : 'text-decoration: none;  opacity: none; color: black;'}
+`;
+
+const WrapperDiv = styled.div`
+  display: flex;
+  align-items: center;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  min-width: 255px;
+  border: none;
+  user-select: none;
+`;
+
+const TextDiv = styled.div`
+  width: 100%;
+`;
 
 const SecondaryInput = styled(TodoInput)`
   height: 50px;
@@ -16,6 +51,13 @@ const ListItemBtn = styled(ActionButton)`
   min-width: 80px;
 `;
 
+const TrashBtn = styled(ActionButton)`
+  min-width: 80px;
+  height: 100%;
+  position: absolute;
+  right: 16px;
+`;
+
 const TodoListItem = ({ id, text, completed, onCheck, onDelete, updateTodo }) => {
   const [isActiveInput, setIsActiveInput] = useState(false);
 
@@ -23,11 +65,7 @@ const TodoListItem = ({ id, text, completed, onCheck, onDelete, updateTodo }) =>
   const showInput = () => setIsActiveInput(true);
 
   return (
-    <li
-      key={id.toString()}
-      data-id={id.toString()}
-      className={completed ? 'todo-item checked completed' : 'todo-item'}
-    >
+    <ListItem key={id} data-id={id} completed={completed}>
       <Paper
         elevation={3}
         sx={{
@@ -42,29 +80,25 @@ const TodoListItem = ({ id, text, completed, onCheck, onDelete, updateTodo }) =>
         <ListItemBtn color="success" onClick={onCheck}>
           <i className="fa-solid fa-circle-check" />
         </ListItemBtn>
-        <div className="todo-item-wrapper">
+        <WrapperDiv>
           {!isActiveInput ? (
-            <div onDoubleClick={() => showInput()} className="todo-item-wrapper-text">
-              {text}
-            </div>
+            <TextDiv onDoubleClick={() => showInput()}>{text}</TextDiv>
           ) : (
-            <div className="secondary-unput">
-              <SecondaryInput
-                autoFocus
-                id={id.toString()}
-                text={text}
-                defaultValue={text}
-                onChange={(e) => updateTodo(id, e.target.value)}
-                onBlur={() => hideInput()}
-              />
-            </div>
+            <SecondaryInput
+              autoFocus
+              id={id.toString()}
+              text={text}
+              defaultValue={text}
+              onChange={(e) => updateTodo(id, e.target.value)}
+              onBlur={() => hideInput()}
+            />
           )}
-        </div>
-        <ListItemBtn color="error" className="todo-item-trash-btn" onClick={onDelete}>
+        </WrapperDiv>
+        <TrashBtn color="error" onClick={onDelete}>
           <i className="fa-solid fa-circle-xmark" />
-        </ListItemBtn>
+        </TrashBtn>
       </Paper>
-    </li>
+    </ListItem>
   );
 };
 

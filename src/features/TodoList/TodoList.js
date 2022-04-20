@@ -1,12 +1,25 @@
 import React from 'react';
+import styled from '@emotion/styled';
 
 import TodoListItem from '../TodoListItem/TodoListItem';
 import filterTodos from '../../utils/filterTodos';
-import './TodoList.scss';
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const UnorderedList = styled.ul`
+  padding: 0;
+  list-style: none;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+`;
 
 const TodoList = ({ todosArr, filter, onCheck, onDelete, updateTodo }) => (
-  <div className="todo-container">
-    <ul className="todo-list">
+  <Container>
+    <UnorderedList>
       {filterTodos(todosArr, filter).map((item) => {
         const { id, text, completed } = item;
 
@@ -22,8 +35,8 @@ const TodoList = ({ todosArr, filter, onCheck, onDelete, updateTodo }) => (
           />
         );
       })}
-    </ul>
-  </div>
+    </UnorderedList>
+  </Container>
 );
 
 export default TodoList;

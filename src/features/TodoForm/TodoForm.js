@@ -4,8 +4,6 @@ import styled from '@emotion/styled';
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
 
-import './TodoForm.scss';
-
 const FormInput = styled(TodoInput)`
   border-radius: 10px;
   width: 250px;
@@ -16,6 +14,15 @@ const FormPanelBtn = styled(ActionButton)`
   width: 80px;
   border-radius: 10px;
   font-size: 12px;
+`;
+
+const Form = styled.form`
+  height: 20vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 450px;
+  margin: 0 auto;
 `;
 
 const AppForm = ({ onAddTodo, toggleAllTodos }) => {
@@ -33,7 +40,7 @@ const AppForm = ({ onAddTodo, toggleAllTodos }) => {
   };
 
   return (
-    <form className="todo-form" onSubmit={(e) => onSubmit(e)}>
+    <Form onSubmit={(e) => onSubmit(e)}>
       <FormInput
         type="text"
         value={inputText}
@@ -46,7 +53,7 @@ const AppForm = ({ onAddTodo, toggleAllTodos }) => {
       <FormPanelBtn color="secondary" onClick={toggleAllTodos}>
         Toggle
       </FormPanelBtn>
-    </form>
+    </Form>
   );
 };
 

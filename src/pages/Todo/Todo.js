@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 
+import styled from '@emotion/styled';
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
 import FilterPanel from '../../features/FilterPanel/FilterPanel';
 
-import './Todo.scss';
+const TodoBody = styled.body`
+  background-color: rgb(255, 255, 255);
+  font-family: 'Roboto', sans-serif;
+  min-height: 100vh;
+`;
+
+const TodoH1 = styled.h1`
+  margin: 0 auto;
+  font-size: 7.5rem;
+  min-height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const App = () => {
   const [todosArr, updateTodosArr] = useState([]);
@@ -67,8 +81,8 @@ const App = () => {
   };
 
   return (
-    <div className="todos-body">
-      <h1 className="todos-title">todos</h1>
+    <TodoBody>
+      <TodoH1>todos</TodoH1>
       <TodoForm onAddTodo={onAddTodo} toggleAllTodos={toggleAllTodos} />
       <TodoList
         todosArr={todosArr}
@@ -83,7 +97,7 @@ const App = () => {
         onFilters={setActiveFilter}
         clearCompleted={clearCompleted}
       />
-    </div>
+    </TodoBody>
   );
 };
 
