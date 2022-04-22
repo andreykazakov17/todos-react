@@ -1,31 +1,29 @@
-import {
-  ADD_TODO,
-  CHECK_TODO,
-  DELETE_TODO,
-  UPDATE_TODO,
-  CLEAR_COMPLETED,
-  TOGGLE_ALL_TODOS,
-} from './actionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  todosArr: [],
-};
-
-const todosReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_TODO:
-      return { todosArr: [...state.todosArr, action.payload] };
-    case CHECK_TODO:
+const todoSlice = createSlice({
+  name: 'todos',
+  initialState: {
+    todosArr: [],
+  },
+  reducers: {
+    addTodo(state, action) {
+      return {
+        todosArr: [...state.todosArr, action.payload],
+      };
+    },
+    checkTodo(state, action) {
       return {
         todosArr: state.todosArr.map((item) =>
           item.id === action.payload ? { ...item, completed: !item.completed } : item,
         ),
       };
-    case DELETE_TODO:
+    },
+    deleteTodo(state, action) {
       return {
         todosArr: state.todosArr.filter((todo) => todo.id !== action.payload),
       };
-    case UPDATE_TODO:
+    },
+    updateTodo(state, action) {
       return {
         todosArr: state.todosArr.map((item) => {
           if (item.id === action.payload.id) {
@@ -34,11 +32,13 @@ const todosReducer = (state = initialState, action) => {
           return item;
         }),
       };
-    case CLEAR_COMPLETED:
+    },
+    onClearCompleted(state) {
       return {
         todosArr: state.todosArr.filter((item) => !item.completed),
       };
-    case TOGGLE_ALL_TODOS:
+    },
+    toggleAllTodos(state) {
       if (state.todosArr.every((item) => item.completed)) {
         return {
           todosArr: state.todosArr.map((item) => ({ ...item, completed: false })),
@@ -53,10 +53,11 @@ const todosReducer = (state = initialState, action) => {
           todosArr: state.todosArr.map((item) => ({ ...item, completed: true })),
         };
       }
-      break;
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
 
-export default todosReducer;
+export const { addTodo, checkTodo, deleteTodo, updateTodo, onClearCompleted, toggleAllTodos } =
+  todoSlice.actions;
+
+export default todoSlice.reducer;

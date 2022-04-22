@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
-import { connect } from 'react-redux';
-import { checkTodo, deleteTodo, updateTodo } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { checkTodo, deleteTodo, updateTodo } from '../../store/todosSlice';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -62,14 +62,24 @@ const StyledTrashActionButton = styled(ActionButton)`
   right: 16px;
 `;
 
-const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }) => {
+const TodoListItem = ({ id, text, completed }) => {
+  const dispatch = useDispatch();
+
   const [isActiveInput, setIsActiveInput] = useState(false);
 
   const hideInput = () => setIsActiveInput(false);
   const showInput = () => setIsActiveInput(true);
 
+  const handleCheckTodo = () => {
+    dispatch(checkTodo(id));
+  };
+
+  const handleDeleteTodo = () => {
+    dispatch(deleteTodo(id));
+  };
+
   const handleUpdateTodo = (e) => {
-    updateTodo({ id, value: e.target.value });
+    dispatch(updateTodo({ id, value: e.target.value }));
   };
 
   return (
@@ -85,7 +95,7 @@ const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }
           borderRadius: '16px',
         }}
       >
-        <StyledActionButton color="success" onClick={() => checkTodo(id)}>
+        <StyledActionButton color="success" onClick={handleCheckTodo}>
           <CheckIcon />
         </StyledActionButton>
         <Wrapper>
@@ -94,7 +104,6 @@ const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }
           ) : (
             <StyledSecondaryInput
               autoFocus
-              id={id.toString()}
               text={text}
               defaultValue={text}
               onChange={handleUpdateTodo}
@@ -102,7 +111,7 @@ const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }
             />
           )}
         </Wrapper>
-        <StyledTrashActionButton color="error" onClick={() => deleteTodo(id)}>
+        <StyledTrashActionButton color="error" onClick={handleDeleteTodo}>
           <TrashIcon />
         </StyledTrashActionButton>
       </Paper>
@@ -110,10 +119,4 @@ const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }
   );
 };
 
-const mapDispatchToProps = {
-  checkTodo,
-  deleteTodo,
-  updateTodo,
-};
-
-export default connect(null, mapDispatchToProps)(TodoListItem);
+export default TodoListItem;

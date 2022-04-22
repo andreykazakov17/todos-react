@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
+import { onClearCompleted } from '../../store/todosSlice';
+import { onFilterChange } from '../../store/filterSlice';
 
 import ActionButton from '../../components/Button/Button';
 
@@ -49,10 +52,20 @@ const Nav = styled.nav`
   margin: 0;
 `;
 
-const FilterPanel = ({ todosArr, activeFilter, setActiveFilter, clearCompleted }) => {
+const FilterPanel = ({ todosArr, activeFilter }) => {
+  const dispatch = useDispatch();
+
   if (!todosArr.length) {
     return null;
   }
+
+  const handleActiveFilter = (filter) => {
+    dispatch(onFilterChange(filter));
+  };
+
+  const handleClearCompleted = () => {
+    dispatch(onClearCompleted());
+  };
 
   return (
     <Wrapper>
@@ -63,7 +76,7 @@ const FilterPanel = ({ todosArr, activeFilter, setActiveFilter, clearCompleted }
             key={filter}
             variant={filter === activeFilter ? 'contained' : 'outlined'}
             size="small"
-            onClick={() => setActiveFilter(filter)}
+            onClick={() => handleActiveFilter(filter)}
             className={`todo-filters-item `}
           >
             {filter}
@@ -74,7 +87,7 @@ const FilterPanel = ({ todosArr, activeFilter, setActiveFilter, clearCompleted }
         variant="outlined"
         color="error"
         className="todo-filters-clear"
-        onClick={clearCompleted}
+        onClick={handleClearCompleted}
       >
         Clear completed
       </StyledClearActionButton>

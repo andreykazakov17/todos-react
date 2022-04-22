@@ -1,8 +1,6 @@
 import React from 'react';
-
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from '@emotion/styled';
-import { clearCompleted, setActiveFilter, toggleAllTodos } from '../../redux/actions';
 
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
@@ -23,27 +21,18 @@ const TodoH1 = styled.h1`
   align-items: center;
 `;
 
-const App = ({ todosArr, activeFilter, setActiveFilter, clearCompleted, toggleAllTodos }) => (
-  <TodoMainDiv>
-    <TodoH1>todos</TodoH1>
-    <TodoForm toggleAllTodos={toggleAllTodos} />
-    <TodoList todosArr={todosArr} activeFilter={activeFilter} />
-    <FilterPanel
-      todosArr={todosArr}
-      activeFilter={activeFilter}
-      setActiveFilter={setActiveFilter}
-      clearCompleted={clearCompleted}
-    />
-  </TodoMainDiv>
-);
-const mapStateToProps = (state) => ({
-  todosArr: state.todos.todosArr,
-  activeFilter: state.filter.activeFilter,
-});
-const mapDispatchToProps = {
-  clearCompleted,
-  setActiveFilter,
-  toggleAllTodos,
+const App = () => {
+  const todosArr = useSelector((state) => state.todos.todosArr);
+  const activeFilter = useSelector((state) => state.filter.activeFilter);
+
+  return (
+    <TodoMainDiv>
+      <TodoH1>todos</TodoH1>
+      <TodoForm />
+      <TodoList todosArr={todosArr} activeFilter={activeFilter} />
+      <FilterPanel todosArr={todosArr} activeFilter={activeFilter} />
+    </TodoMainDiv>
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

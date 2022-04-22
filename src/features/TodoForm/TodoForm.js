@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { connect } from 'react-redux';
-import { addTodo } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { addTodo, toggleAllTodos } from '../../store/todosSlice';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -27,8 +27,9 @@ const Form = styled.form`
   margin: 0 auto;
 `;
 
-const AppForm = ({ addTodo, toggleAllTodos }) => {
+const AppForm = () => {
   const [inputText, setInputText] = useState('');
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
@@ -45,8 +46,12 @@ const AppForm = ({ addTodo, toggleAllTodos }) => {
       id: new Date().getTime(),
     };
 
-    addTodo(newTodo);
+    dispatch(addTodo(newTodo));
     setInputText('');
+  };
+
+  const handleToggleAllTodos = () => {
+    dispatch(toggleAllTodos());
   };
 
   return (
@@ -60,15 +65,11 @@ const AppForm = ({ addTodo, toggleAllTodos }) => {
       <FormPanelBtn type="submit" variant="contained" color="success">
         Add
       </FormPanelBtn>
-      <FormPanelBtn color="secondary" onClick={toggleAllTodos}>
+      <FormPanelBtn color="secondary" onClick={handleToggleAllTodos}>
         Toggle
       </FormPanelBtn>
     </Form>
   );
 };
 
-const mapDispatchToProps = {
-  addTodo,
-};
-
-export default connect(null, mapDispatchToProps)(AppForm);
+export default AppForm;
