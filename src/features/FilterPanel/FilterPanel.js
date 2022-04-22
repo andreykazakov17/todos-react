@@ -74,7 +74,7 @@ const FilterPanel = ({ todosArr, activeFilter, setActiveFilter, clearCompleted }
         variant="outlined"
         color="error"
         className="todo-filters-clear"
-        onClick={() => clearCompleted()}
+        onClick={clearCompleted}
       >
         Clear completed
       </StyledClearActionButton>
