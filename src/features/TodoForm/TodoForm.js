@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import { connect } from 'react-redux';
+import { addTodo } from '../../redux/actions';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -25,7 +27,7 @@ const Form = styled.form`
   margin: 0 auto;
 `;
 
-const AppForm = ({ onAddTodo, toggleAllTodos }) => {
+const AppForm = ({ addTodo, toggleAllTodos }) => {
   const [inputText, setInputText] = useState('');
 
   const handleInputChange = (e) => {
@@ -35,17 +37,25 @@ const AppForm = ({ onAddTodo, toggleAllTodos }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    onAddTodo(inputText);
+    if (!inputText) return;
+
+    const newTodo = {
+      text: inputText,
+      completed: false,
+      id: new Date().getTime(),
+    };
+
+    addTodo(newTodo);
     setInputText('');
   };
 
   return (
-    <Form onSubmit={(e) => onSubmit(e)}>
+    <Form onSubmit={onSubmit}>
       <FormInput
         type="text"
         value={inputText}
         placeholder="What needs to be done?"
-        onChange={(e) => handleInputChange(e)}
+        onChange={handleInputChange}
       />
       <FormPanelBtn type="submit" variant="contained" color="success">
         Add
@@ -57,4 +67,8 @@ const AppForm = ({ onAddTodo, toggleAllTodos }) => {
   );
 };
 
-export default AppForm;
+const mapDispatchToProps = {
+  addTodo,
+};
+
+export default connect(null, mapDispatchToProps)(AppForm);

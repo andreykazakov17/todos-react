@@ -17,23 +17,12 @@ const UnorderedList = styled.ul`
   position: relative;
 `;
 
-const TodoList = ({ todosArr, filter, onCheck, onDelete, updateTodo }) => (
+const TodoList = ({ todosArr, activeFilter }) => (
   <Container>
     <UnorderedList>
-      {filterTodos(todosArr, filter).map((item) => {
+      {filterTodos(todosArr, activeFilter).map((item) => {
         const { id, text, completed } = item;
-
-        return (
-          <TodoListItem
-            key={id}
-            id={id}
-            text={text}
-            completed={completed}
-            onCheck={() => onCheck(id)}
-            onDelete={() => onDelete(id)}
-            updateTodo={updateTodo}
-          />
-        );
+        return <TodoListItem key={id} id={id} text={text} completed={completed} />;
       })}
     </UnorderedList>
   </Container>

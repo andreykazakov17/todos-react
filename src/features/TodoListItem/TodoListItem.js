@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
+import { connect } from 'react-redux';
+import { checkTodo, deleteTodo, updateTodo } from '../../redux/actions';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
+import CheckIcon from '../../icons/CheckIcon';
+import TrashIcon from '../../icons/TrashIcon';
 
 const ListItem = styled.li`
   position: relative;
@@ -28,7 +32,7 @@ const ListItem = styled.li`
       : 'text-decoration: none;  opacity: none; color: black;'}
 `;
 
-const WrapperDiv = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   color: rgb(0, 0, 0);
@@ -38,34 +42,38 @@ const WrapperDiv = styled.div`
   user-select: none;
 `;
 
-const TextDiv = styled.div`
+const Text = styled.div`
   width: 100%;
 `;
 
-const SecondaryInput = styled(TodoInput)`
+const StyledSecondaryInput = styled(TodoInput)`
   height: 50px;
   font-size: 18px;
 `;
 
-const ListItemBtn = styled(ActionButton)`
+const StyledActionButton = styled(ActionButton)`
   min-width: 80px;
 `;
 
-const TrashBtn = styled(ActionButton)`
+const StyledTrashActionButton = styled(ActionButton)`
   min-width: 80px;
   height: 100%;
   position: absolute;
   right: 16px;
 `;
 
-const TodoListItem = ({ id, text, completed, onCheck, onDelete, updateTodo }) => {
+const TodoListItem = ({ id, text, completed, checkTodo, deleteTodo, updateTodo }) => {
   const [isActiveInput, setIsActiveInput] = useState(false);
 
   const hideInput = () => setIsActiveInput(false);
   const showInput = () => setIsActiveInput(true);
 
+  const handleUpdateTodo = (e) => {
+    updateTodo({ id, value: e.target.value });
+  };
+
   return (
-    <ListItem key={id} data-id={id} completed={completed}>
+    <ListItem key={id} completed={completed}>
       <Paper
         elevation={3}
         sx={{
@@ -77,29 +85,35 @@ const TodoListItem = ({ id, text, completed, onCheck, onDelete, updateTodo }) =>
           borderRadius: '16px',
         }}
       >
-        <ListItemBtn color="success" onClick={onCheck}>
-          <i className="fa-solid fa-circle-check" />
-        </ListItemBtn>
-        <WrapperDiv>
+        <StyledActionButton color="success" onClick={() => checkTodo(id)}>
+          <CheckIcon />
+        </StyledActionButton>
+        <Wrapper>
           {!isActiveInput ? (
-            <TextDiv onDoubleClick={() => showInput()}>{text}</TextDiv>
+            <Text onDoubleClick={showInput}>{text}</Text>
           ) : (
-            <SecondaryInput
+            <StyledSecondaryInput
               autoFocus
               id={id.toString()}
               text={text}
               defaultValue={text}
-              onChange={(e) => updateTodo(id, e.target.value)}
-              onBlur={() => hideInput()}
+              onChange={handleUpdateTodo}
+              onBlur={hideInput}
             />
           )}
-        </WrapperDiv>
-        <TrashBtn color="error" onClick={onDelete}>
-          <i className="fa-solid fa-circle-xmark" />
-        </TrashBtn>
+        </Wrapper>
+        <StyledTrashActionButton color="error" onClick={() => deleteTodo(id)}>
+          <TrashIcon />
+        </StyledTrashActionButton>
       </Paper>
     </ListItem>
   );
 };
 
-export default TodoListItem;
+const mapDispatchToProps = {
+  checkTodo,
+  deleteTodo,
+  updateTodo,
+};
+
+export default connect(null, mapDispatchToProps)(TodoListItem);

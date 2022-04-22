@@ -5,7 +5,7 @@ import ActionButton from '../../components/Button/Button';
 
 const filtersArr = ['All', 'Active', 'Completed'];
 
-const FilterBtn = styled(ActionButton)`
+const StyledFilterActionButton = styled(ActionButton)`
   min-width: 90px;
   font-size: 10px;
   min-height: 30px;
@@ -14,14 +14,14 @@ const FilterBtn = styled(ActionButton)`
   align-items: center
 `;
 
-const ClearCompletedBtn = styled(ActionButton)`
+const StyledClearActionButton = styled(ActionButton)`
   min-width: 90px;
   font-size: 10px;
   min-height: 30px;
   border-radius: 10px;
 `;
 
-const WrapperDiv = styled.div`
+const Wrapper = styled.div`
   visibility: visible;
   height: 2rem;
   width: 40rem;
@@ -34,7 +34,7 @@ const WrapperDiv = styled.div`
   align-items: center;
 `;
 
-const CounterDiv = styled.div`
+const Counter = styled.div`
   font-size: 14px;
   width: 100px;
 `;
@@ -49,36 +49,36 @@ const Nav = styled.nav`
   margin: 0;
 `;
 
-const FilterPanel = ({ todosArr, activeFilter, onFilters, clearCompleted }) => {
+const FilterPanel = ({ todosArr, activeFilter, setActiveFilter, clearCompleted }) => {
   if (!todosArr.length) {
     return null;
   }
 
   return (
-    <WrapperDiv>
-      <CounterDiv>Total: {todosArr.length}</CounterDiv>
+    <Wrapper>
+      <Counter>Total: {todosArr.length}</Counter>
       <Nav>
         {filtersArr.map((filter) => (
-          <FilterBtn
+          <StyledFilterActionButton
             key={filter}
             variant={filter === activeFilter ? 'contained' : 'outlined'}
             size="small"
-            onClick={() => onFilters(filter)}
+            onClick={() => setActiveFilter(filter)}
             className={`todo-filters-item `}
           >
             {filter}
-          </FilterBtn>
+          </StyledFilterActionButton>
         ))}
       </Nav>
-      <ClearCompletedBtn
+      <StyledClearActionButton
         variant="outlined"
         color="error"
         className="todo-filters-clear"
         onClick={() => clearCompleted()}
       >
         Clear completed
-      </ClearCompletedBtn>
-    </WrapperDiv>
+      </StyledClearActionButton>
+    </Wrapper>
   );
 };
 
