@@ -7,51 +7,40 @@ const todoSlice = createSlice({
   },
   reducers: {
     addTodo(state, action) {
-      return {
-        todosArr: [...state.todosArr, action.payload],
-      };
+      state.todosArr.push(action.payload);
     },
     checkTodo(state, action) {
-      return {
-        todosArr: state.todosArr.map((item) =>
-          item.id === action.payload ? { ...item, completed: !item.completed } : item,
-        ),
-      };
+      state.todosArr.forEach((item, index) => {
+        if (item.id === action.payload) {
+          state.todosArr[index] = { ...item, completed: !item.completed };
+        }
+      });
     },
     deleteTodo(state, action) {
-      return {
-        todosArr: state.todosArr.filter((todo) => todo.id !== action.payload),
-      };
+      const index = state.todosArr.findIndex((todo) => todo.id === action.payload);
+      state.todosArr.splice(index, 1);
     },
     updateTodo(state, action) {
-      return {
-        todosArr: state.todosArr.map((item) => {
-          if (item.id === action.payload.id) {
-            return { ...item, text: action.payload.value };
-          }
-          return item;
-        }),
-      };
+      state.todosArr.forEach((item, index) => {
+        if (item.id === action.payload.id) {
+          state.todosArr[index] = { ...item, text: action.payload.value };
+        }
+      });
     },
     onClearCompleted(state) {
-      return {
-        todosArr: state.todosArr.filter((item) => !item.completed),
-      };
+      state.todosArr = state.todosArr.filter((item) => !item.completed);
     },
     toggleAllTodos(state) {
-      if (state.todosArr.every((item) => item.completed)) {
-        return {
-          todosArr: state.todosArr.map((item) => ({ ...item, completed: false })),
-        };
+      const everyChecked = state.todosArr.every((item) => item.completed);
+      const everyUnchecked = state.todosArr.every((item) => !item.completed);
+      const someChecked = state.todosArr.some((item) => item.completed);
+
+      if (everyUnchecked || someChecked) {
+        state.todosArr = state.todosArr.map((item) => ({ ...item, completed: true }));
       }
 
-      if (
-        state.todosArr.every((item) => !item.completed) ||
-        state.todosArr.some((item) => item.completed)
-      ) {
-        return {
-          todosArr: state.todosArr.map((item) => ({ ...item, completed: true })),
-        };
+      if (everyChecked) {
+        state.todosArr = state.todosArr.map((item) => ({ ...item, completed: false }));
       }
     },
   },
