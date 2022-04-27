@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
-import { onClearCompleted } from '../../store/todosSlice';
 import { onFilterChange } from '../../store/filterSlice';
 
 import ActionButton from '../../components/Button/Button';
@@ -64,7 +63,7 @@ const FilterPanel = ({ todosArr, activeFilter }) => {
   };
 
   const handleClearCompleted = () => {
-    dispatch(onClearCompleted());
+    dispatch({ type: 'CLEAR_COMPLETED' });
   };
 
   return (

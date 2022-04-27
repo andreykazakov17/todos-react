@@ -1,52 +1,60 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const todoSlice = createSlice({
   name: 'todos',
   initialState: {
     todosArr: [],
+    idsArr: [],
   },
   reducers: {
+    getTodos(state = initialState, action) {
+      state.todosArr = action.payload;
+    },
     addTodo(state, action) {
       state.todosArr.push(action.payload);
     },
     checkTodo(state, action) {
-      state.todosArr.forEach((item, index) => {
-        if (item.id === action.payload) {
+      const todosArr = current(state.todosArr);
+      todosArr.forEach((item, index) => {
+        if (item._id === action.payload) {
           state.todosArr[index] = { ...item, completed: !item.completed };
         }
       });
     },
     deleteTodo(state, action) {
-      const index = state.todosArr.findIndex((todo) => todo.id === action.payload);
+      const todosArr = current(state.todosArr);
+      const index = todosArr.findIndex((todo) => todo._id === action.payload);
       state.todosArr.splice(index, 1);
     },
     updateTodo(state, action) {
-      state.todosArr.forEach((item, index) => {
-        if (item.id === action.payload.id) {
-          state.todosArr[index] = { ...item, text: action.payload.value };
-        }
-      });
+      const todosArr = current(state.todosArr);
+      const index = todosArr.findIndex((todo) => todo._id === action.payload._id);
+      state.todosArr.splice(index, 1, action.payload);
     },
-    onClearCompleted(state) {
-      state.todosArr = state.todosArr.filter((item) => !item.completed);
+    clearCompleted(state, action) {
+      state.todosArr = action.payload;
     },
-    toggleAllTodos(state) {
-      const everyChecked = state.todosArr.every((item) => item.completed);
-      const everyUnchecked = state.todosArr.every((item) => !item.completed);
-      const someChecked = state.todosArr.some((item) => item.completed);
+    toggleAllTodos(state, action) {
+      state.todosArr = action.payload;
+    },
+    updateIdsArr(state, action) {
+      const idsArr = current(state.idsArr);
 
-      if (everyUnchecked || someChecked) {
-        state.todosArr = state.todosArr.map((item) => ({ ...item, completed: true }));
-      }
-
-      if (everyChecked) {
-        state.todosArr = state.todosArr.map((item) => ({ ...item, completed: false }));
+      if (!idsArr.includes(action.payload)) {
+        state.idsArr = [...state.idsArr, action.payload];
       }
     },
   },
 });
 
-export const { addTodo, checkTodo, deleteTodo, updateTodo, onClearCompleted, toggleAllTodos } =
-  todoSlice.actions;
+export const {
+  addTodo,
+  checkTodo,
+  deleteTodo,
+  updateTodo,
+  clearCompleted,
+  toggleAllTodos,
+  updateIdsArr,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;

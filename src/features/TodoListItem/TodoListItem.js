@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
 import { useDispatch } from 'react-redux';
-import { checkTodo, deleteTodo, updateTodo } from '../../store/todosSlice';
+import { updateIdsArr } from '../../store/todosSlice';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -71,15 +71,16 @@ const TodoListItem = ({ id, text, completed }) => {
   const showInput = () => setIsActiveInput(true);
 
   const handleCheckTodo = () => {
-    dispatch(checkTodo(id));
+    dispatch({ type: 'CHECK_TODO', payload: id });
+    dispatch(updateIdsArr(id));
   };
 
   const handleDeleteTodo = () => {
-    dispatch(deleteTodo(id));
+    dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
   const handleUpdateTodo = (e) => {
-    dispatch(updateTodo({ id, value: e.target.value }));
+    dispatch({ type: 'UPDATE_TODO', payload: { id, value: e.target.value } });
   };
 
   return (

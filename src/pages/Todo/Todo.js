@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 
 import TodoForm from '../../features/TodoForm/TodoForm';
@@ -24,6 +24,11 @@ const TodoH1 = styled.h1`
 const App = () => {
   const todosArr = useSelector((state) => state.todos.todosArr);
   const activeFilter = useSelector((state) => state.filter.activeFilter);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: 'LOAD_TODOS' });
+  }, []);
 
   return (
     <TodoMainDiv>

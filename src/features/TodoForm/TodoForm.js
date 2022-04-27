@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
-import { addTodo, toggleAllTodos } from '../../store/todosSlice';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -40,18 +39,13 @@ const AppForm = () => {
 
     if (!inputText) return;
 
-    const newTodo = {
-      text: inputText,
-      completed: false,
-      id: new Date().getTime(),
-    };
-
-    dispatch(addTodo(newTodo));
+    dispatch({ type: 'ADD_TODO', payload: inputText });
     setInputText('');
   };
 
   const handleToggleAllTodos = () => {
-    dispatch(toggleAllTodos());
+    // dispatch(toggleAllTodos());
+    dispatch({ type: 'TOGGLE_ALL' });
   };
 
   return (
