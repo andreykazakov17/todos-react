@@ -1,36 +1,31 @@
 import axios from 'axios';
 
-export async function fetchGetTodos() {
-  const request = await axios.get('http://localhost:5001/todos');
+const callApi = async (config) => {
+  const request = await axios({
+    method: config.method,
+    url: `http://localhost:5001${config.url}`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: config.data,
+  });
   return request.data;
-}
+};
 
-export async function fetchAddTodo(text) {
-  const request = await axios.post('http://localhost:5001/todos', text);
-  return request.data;
-}
+export const fetchGetTodos = async () => await callApi({ method: 'GET', url: '/todos' });
+export const fetchAddTodo = async (text) =>
+  await callApi({ method: 'POST', url: '/todos', data: text });
 
-export async function fetchCheckTodo(id) {
-  const request = await axios.patch(`http://localhost:5001/todos/${id}`, id);
-  return request.data;
-}
+export const fetchCheckTodo = async (id) =>
+  await callApi({ method: 'PATCH', url: `/todos/${id}`, data: id });
 
-export async function fetchDeleteTodo(id) {
-  const request = await axios.delete(`http://localhost:5001/todos/${id}`, id);
-  return request.data;
-}
+export const fetchDeleteTodo = async (id) =>
+  await callApi({ method: 'DELETE', url: `/todos/${id}`, data: id });
 
-export async function fetchUpdateTodo({ id, value }) {
-  const request = await axios.post(`http://localhost:5001/todos/${id}`, { id, value });
-  return request.data;
-}
+export const fetchUpdateTodo = async ({ id, value }) =>
+  await callApi({ method: 'POST', url: `/todos/${id}`, data: { id, value } });
 
-export async function fetchClearCompleted(action) {
-  const request = await axios.post(`http://localhost:5001/todos/clearAll`, action);
-  return request.data;
-}
+export const fetchClearCompleted = async (action) =>
+  await callApi({ method: 'POST', url: `/todos/clearAll`, data: action });
 
-export async function fetchToggleAll() {
-  const request = await axios.patch('http://localhost:5001/todos');
-  return request.data;
-}
+export const fetchToggleAll = async () => await callApi({ method: 'PATCH', url: `/todos` });

@@ -21,8 +21,8 @@ const TodoList = ({ todosArr, activeFilter }) => (
   <Container>
     <UnorderedList>
       {filterTodos(todosArr, activeFilter).map((item) => {
-        const { _id, text, completed } = item;
-        return <TodoListItem key={_id} id={_id} text={text} completed={completed} />;
+        const { id, text, completed } = item;
+        return <TodoListItem key={id} id={id} text={text} completed={completed} />;
       })}
     </UnorderedList>
   </Container>

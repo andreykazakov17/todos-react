@@ -1,4 +1,5 @@
-import { put, call, takeEvery } from '@redux-saga/core/effects';
+import { put, call, takeEvery, select } from '@redux-saga/core/effects';
+import { todosArrSelector } from '../todosSlice';
 import {
   fetchGetTodos,
   fetchAddTodo,
@@ -23,7 +24,7 @@ export function* workerAddTodoSaga(action) {
 
 export function* workerCheckTodoSaga(action) {
   const checkedTodo = yield call(fetchCheckTodo, action.payload);
-  yield put({ type: 'todos/checkTodo', payload: checkedTodo._id });
+  yield put({ type: 'todos/checkTodo', payload: checkedTodo.id });
 }
 
 export function* workerDeleteTodoSaga(action) {
@@ -38,10 +39,10 @@ export function* workerUpdateTodoSaga(action) {
 
 export function* workerClearCompletedSaga() {
   const idsArr = [];
-  const actualArr = yield call(fetchGetTodos);
+  const actualArr = yield select(todosArrSelector);
   for (const todo of actualArr) {
     if (todo.completed) {
-      idsArr.push(todo._id);
+      idsArr.push(todo.id);
     }
   }
   const request = yield call(fetchClearCompleted, idsArr);
