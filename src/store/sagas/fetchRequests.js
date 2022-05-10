@@ -1,31 +1,55 @@
 import axios from 'axios';
 
-const callApi = async (config) => {
-  const request = await axios({
-    method: config.method,
-    url: `http://localhost:5001${config.url}`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: config.data,
-  });
-  return request.data;
-};
+const api = axios.create({
+  baseURL: 'http://localhost:5001/todos',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
 
-export const fetchGetTodos = async () => await callApi({ method: 'GET', url: '/todos' });
-export const fetchAddTodo = async (text) =>
-  await callApi({ method: 'POST', url: '/todos', data: text });
+api.interceptors.request.use((config) => {
+  console.log('config', config);
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  return config;
+});
 
-export const fetchCheckTodo = async (id) =>
-  await callApi({ method: 'PATCH', url: `/todos/${id}`, data: id });
+api.interceptors.response.use(
+  (response) => {
+    console.log('response', response);
+    return response;
+  },
+  async (error) => {
+    console.log(error);
+    const originalRequest = error.config;
+    if (error.response.status == 401 && error.config && !error.config._isRetry) {
+      originalRequest._isRetry = true;
+      try {
+        const response = await axios({ method: 'GET', url: 'http://localhost:5001/todos/refresh' });
+        console.log('response.get', response);
+        localStorage.setItem('token', response.data.accessToken);
+        return api.request(originalRequest);
+      } catch (e) {
+        console.log('Not authorized');
+      }
+    }
+    throw error;
+  },
+);
 
-export const fetchDeleteTodo = async (id) =>
-  await callApi({ method: 'DELETE', url: `/todos/${id}`, data: id });
+export const fetchRegistration = (payload) =>
+  api({ method: 'POST', url: 'registration', data: payload });
 
+export const fetchLogin = (payload) => api({ method: 'POST', url: '/login', data: payload });
+export const fetchLogout = () => api({ method: 'POST', url: '/logout' });
+export const fetchRefresh = () => api({ method: 'GET', url: '/refresh' });
+export const fetchGetTodos = async () => api({ method: 'GET' });
+export const fetchAddTodo = async (text) => api({ method: 'POST', data: text });
+export const fetchCheckTodo = async (id) => api({ method: 'PATCH', url: `/${id}`, data: id });
+export const fetchDeleteTodo = async (id) => api({ method: 'DELETE', url: `/${id}`, data: id });
 export const fetchUpdateTodo = async ({ id, value }) =>
-  await callApi({ method: 'POST', url: `/todos/${id}`, data: { id, value } });
-
+  api({ method: 'POST', url: `/${id}`, data: { id, value } });
 export const fetchClearCompleted = async (action) =>
-  await callApi({ method: 'POST', url: `/todos/clearAll`, data: action });
-
-export const fetchToggleAll = async () => await callApi({ method: 'PATCH', url: `/todos` });
+  api({ method: 'POST', url: `/clearAll`, data: action });
+export const fetchToggleAll = async () => api({ method: 'PATCH' });
+export const fetchLoadUser = async () => api({ method: 'GET', url: '/user' });

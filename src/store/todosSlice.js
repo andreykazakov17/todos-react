@@ -7,7 +7,7 @@ const todoSlice = createSlice({
     idsArr: [],
   },
   reducers: {
-    getTodos(state = initialState, action) {
+    getTodos(state, action) {
       state.todosArr = action.payload;
     },
     addTodo(state, action) {

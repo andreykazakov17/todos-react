@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -28,6 +28,7 @@ const Form = styled.form`
 
 const AppForm = () => {
   const [inputText, setInputText] = useState('');
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -41,6 +42,8 @@ const AppForm = () => {
 
     dispatch({ type: 'ADD_TODO', payload: inputText });
     setInputText('');
+
+    console.log(user);
   };
 
   const handleToggleAllTodos = () => {

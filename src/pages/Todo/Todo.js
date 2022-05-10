@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
+import { Container } from '@mui/material';
 
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
@@ -28,15 +30,26 @@ const App = () => {
 
   useEffect(() => {
     dispatch({ type: 'LOAD_TODOS' });
+    dispatch({ type: 'LOAD_USER' });
   }, []);
 
+  const logout = () => {
+    dispatch({ type: 'LOG_OUT' });
+    localStorage.clear();
+  };
+
   return (
-    <TodoMainDiv>
-      <TodoH1>todos</TodoH1>
-      <TodoForm />
-      <TodoList todosArr={todosArr} activeFilter={activeFilter} />
-      <FilterPanel todosArr={todosArr} activeFilter={activeFilter} />
-    </TodoMainDiv>
+    <>
+      <Link onClick={logout} to="/signup" style={{ marginLeft: '5rem' }}>
+        Log out
+      </Link>
+      <TodoMainDiv>
+        <TodoH1>todos</TodoH1>
+        <TodoForm />
+        <TodoList todosArr={todosArr} activeFilter={activeFilter} />
+        <FilterPanel todosArr={todosArr} activeFilter={activeFilter} />
+      </TodoMainDiv>
+    </>
   );
 };
 
