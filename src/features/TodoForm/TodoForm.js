@@ -28,7 +28,7 @@ const Form = styled.form`
 
 const AppForm = () => {
   const [inputText, setInputText] = useState('');
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {

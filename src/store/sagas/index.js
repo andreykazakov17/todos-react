@@ -1,5 +1,14 @@
 import { put, call, takeEvery, select } from '@redux-saga/core/effects';
-import { todosArrSelector } from '../todosSlice';
+import {
+  getTodos,
+  todosArrSelector,
+  addTodo,
+  checkTodo,
+  deleteTodo,
+  updateTodo,
+  clearCompleted,
+  toggleAllTodos,
+} from '../todosSlice';
 
 import {
   fetchGetTodos,
@@ -11,37 +20,37 @@ import {
   fetchToggleAll,
   fetchRegistration,
   fetchLogin,
-  fetchLogout,
   fetchRefresh,
   fetchLoadUser,
 } from './fetchRequests';
 
+import { registration, login, checkAuth, updateStore } from '../userSlice';
+
 // SAGAS
 
-export function* workerLoadTodosSaga() {
-  const response = yield call(fetchGetTodos);
-  yield put({ type: 'todos/getTodos', payload: response.data });
+export function* workerLoadTodosSaga(action) {
+  const response = yield call(fetchGetTodos, action.payload);
+  yield put(getTodos(response.data));
 }
 
 export function* workerAddTodoSaga(action) {
-  console.log(action.payload);
   const response = yield call(fetchAddTodo, action.payload);
-  yield put({ type: 'todos/addTodo', payload: response.data });
+  yield put(addTodo(response.data));
 }
 
 export function* workerCheckTodoSaga(action) {
   const response = yield call(fetchCheckTodo, action.payload);
-  yield put({ type: 'todos/checkTodo', payload: response.data.id });
+  yield put(checkTodo(response.data.id));
 }
 
 export function* workerDeleteTodoSaga(action) {
   const response = yield call(fetchDeleteTodo, action.payload);
-  yield put({ type: 'todos/deleteTodo', payload: response.data });
+  yield put(deleteTodo(response.data));
 }
 
 export function* workerUpdateTodoSaga(action) {
   const response = yield call(fetchUpdateTodo, action.payload);
-  yield put({ type: 'todos/updateTodo', payload: response.data });
+  yield put(updateTodo(response.data));
 }
 
 export function* workerClearCompletedSaga() {
@@ -53,51 +62,39 @@ export function* workerClearCompletedSaga() {
     }
   }
   const response = yield call(fetchClearCompleted, idsArr);
-  yield put({ type: 'todos/clearCompleted', payload: response.data });
+  yield put(clearCompleted(response.data));
 }
 
 export function* workerToggleAllSaga() {
   const response = yield call(fetchToggleAll);
-  yield put({ type: 'todos/toggleAllTodos', payload: response.data });
+  yield put(toggleAllTodos(response.data));
 }
 
 export function* workerRegistrationSaga(action) {
   const response = yield call(fetchRegistration, action.payload);
   localStorage.setItem('accessToken', response.data.accessToken);
   localStorage.setItem('refreshToken', response.data.refreshToken);
-  yield put({ type: 'user/registration', payload: response.data });
+  yield put(registration(response.data));
 }
 
 export function* workerLoginSaga(action) {
   const response = yield call(fetchLogin, action.payload);
-  console.log(response.data);
   localStorage.setItem('accessToken', response.data.accessToken);
   localStorage.setItem('refreshToken', response.data.refreshToken);
-  localStorage.setItem('isAuth', JSON.stringify(response.data.user.isAuth));
-  yield put({ type: 'user/login', payload: response.data });
-}
-
-export function* workerLogoutSaga(action) {
-  console.log(action);
-  const response = yield call(fetchLogout);
-  console.log(response);
-  // console.log(response);
-  // console.log(localStorage.getItem('isAuth'));
-  // localStorage.clear();
-  yield put({ type: 'user/logout' });
+  localStorage.setItem('userId', JSON.stringify(response.data.user.id));
+  yield put(login(response.data));
 }
 
 export function* workerCheckAuthSaga() {
   const response = yield call(fetchRefresh);
   localStorage.setItem('accessToken', response.data.accessToken);
   localStorage.setItem('refreshToken', response.data.refreshToken);
-  yield put({ type: 'user/checkAuth', payload: response.data.accessToken });
+  yield put(checkAuth(response.data.accessToken));
 }
 
-export function* workerLoadUserSaga() {
-  const response = yield call(fetchLoadUser);
-  console.log(response);
-  yield put({ type: 'user/updateStore', payload: response.data });
+export function* workerLoadUserSaga(action) {
+  const response = yield call(fetchLoadUser, action.payload);
+  yield put(updateStore(response.data));
 }
 
 export function* watchSaga() {
@@ -110,7 +107,6 @@ export function* watchSaga() {
   yield takeEvery('TOGGLE_ALL', workerToggleAllSaga);
   yield takeEvery('SIGN_UP', workerRegistrationSaga);
   yield takeEvery('LOG_IN', workerLoginSaga);
-  yield takeEvery('LOG_OUT', workerLogoutSaga);
   yield takeEvery('CHECK_AUTH', workerCheckAuthSaga);
   yield takeEvery('LOAD_USER', workerLoadUserSaga);
 }

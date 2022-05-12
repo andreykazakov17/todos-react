@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5001/todos',
+  baseURL: 'http://localhost:5001',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -9,7 +9,6 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  console.log('config', config);
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 });
@@ -38,18 +37,21 @@ api.interceptors.response.use(
 );
 
 export const fetchRegistration = (payload) =>
-  api({ method: 'POST', url: 'registration', data: payload });
+  api({ method: 'POST', url: '/registration', data: payload });
 
 export const fetchLogin = (payload) => api({ method: 'POST', url: '/login', data: payload });
-export const fetchLogout = () => api({ method: 'POST', url: '/logout' });
 export const fetchRefresh = () => api({ method: 'GET', url: '/refresh' });
-export const fetchGetTodos = async () => api({ method: 'GET' });
-export const fetchAddTodo = async (text) => api({ method: 'POST', data: text });
-export const fetchCheckTodo = async (id) => api({ method: 'PATCH', url: `/${id}`, data: id });
-export const fetchDeleteTodo = async (id) => api({ method: 'DELETE', url: `/${id}`, data: id });
+
+export const fetchGetTodos = async (payload) =>
+  api({ method: 'GET', url: '/todos', data: payload });
+export const fetchAddTodo = async (text) => api({ method: 'POST', url: '/todos', data: text });
+export const fetchCheckTodo = async (id) => api({ method: 'PATCH', url: `/todos/${id}`, data: id });
+export const fetchDeleteTodo = async (id) =>
+  api({ method: 'DELETE', url: `/todos/${id}`, data: id });
 export const fetchUpdateTodo = async ({ id, value }) =>
-  api({ method: 'POST', url: `/${id}`, data: { id, value } });
+  api({ method: 'POST', url: `/todos/${id}`, data: { id, value } });
 export const fetchClearCompleted = async (action) =>
-  api({ method: 'POST', url: `/clearAll`, data: action });
-export const fetchToggleAll = async () => api({ method: 'PATCH' });
-export const fetchLoadUser = async () => api({ method: 'GET', url: '/user' });
+  api({ method: 'POST', url: `/todos/clearAll`, data: action });
+export const fetchToggleAll = async () => api({ method: 'PATCH', url: '/todos' });
+export const fetchLoadUser = async (payload) =>
+  api({ method: 'POST', url: '/todos/user', data: payload });

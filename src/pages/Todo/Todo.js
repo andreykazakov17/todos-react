@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
-import { Container } from '@mui/material';
 
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
@@ -29,12 +28,13 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({ type: 'LOAD_TODOS' });
-    dispatch({ type: 'LOAD_USER' });
+    if (localStorage.getItem('userId')) {
+      dispatch({ type: 'LOAD_TODOS' });
+      dispatch({ type: 'LOAD_USER', payload: localStorage.getItem('userId') });
+    }
   }, []);
 
   const logout = () => {
-    dispatch({ type: 'LOG_OUT' });
     localStorage.clear();
   };
 

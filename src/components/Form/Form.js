@@ -8,7 +8,7 @@ import { Container, Paper } from '@mui/material';
 import styled from '@emotion/styled';
 import TodoInput from '../Input/Input';
 
-const StyledAutorizationInput = styled(TodoInput)`
+const StyledAuthorizationInput = styled(TodoInput)`
   height: 30px;
   font-size: 16px;
   margin-top: 10px;
@@ -52,8 +52,8 @@ const Form = ({ name, submitForm, linkPath, linkName }) => {
       >
         <h1>{name}</h1>
         <form onSubmit={handleSubmit(submitForm)}>
-          <StyledAutorizationInput name="email" placeholder="Email..." {...register('email')} />
-          <StyledAutorizationInput
+          <StyledAuthorizationInput name="email" placeholder="Email..." {...register('email')} />
+          <StyledAuthorizationInput
             name="password"
             type="password"
             placeholder="Password..."
