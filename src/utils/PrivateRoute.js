@@ -1,18 +1,10 @@
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = localStorage.getItem('userId');
-    if (!user) {
-      return navigate('/login', { replace: true, state: { from: location } });
-    }
-  }, []);
-
-  return children;
+  const user = localStorage.getItem('userId');
+  return user ? children : <Navigate to="/login" state={{ from: location }} />;
 };
 
 export default PrivateRoute;

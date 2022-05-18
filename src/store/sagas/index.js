@@ -22,79 +22,132 @@ import {
   fetchLogin,
   fetchRefresh,
   fetchLoadUser,
-} from './fetchRequests';
+  fetchLogout,
+} from '../../api/api';
 
-import { registration, login, checkAuth, updateStore } from '../userSlice';
+import { registration, setUser, logout } from '../userSlice';
 
-// SAGAS
+const error = (e) => new Error(e);
 
-export function* workerLoadTodosSaga(action) {
-  const response = yield call(fetchGetTodos, action.payload);
-  yield put(getTodos(response.data));
+export function* workerLoadTodosSaga() {
+  try {
+    const response = yield call(fetchGetTodos);
+    yield put(getTodos(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerAddTodoSaga(action) {
-  const response = yield call(fetchAddTodo, action.payload);
-  yield put(addTodo(response.data));
+  try {
+    const response = yield call(fetchAddTodo, action.payload);
+    yield put(addTodo(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerCheckTodoSaga(action) {
-  const response = yield call(fetchCheckTodo, action.payload);
-  yield put(checkTodo(response.data.id));
+  try {
+    const response = yield call(fetchCheckTodo, action.payload);
+    yield put(checkTodo(response.data.id));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerDeleteTodoSaga(action) {
-  const response = yield call(fetchDeleteTodo, action.payload);
-  yield put(deleteTodo(response.data));
+  try {
+    const response = yield call(fetchDeleteTodo, action.payload);
+    yield put(deleteTodo(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerUpdateTodoSaga(action) {
-  const response = yield call(fetchUpdateTodo, action.payload);
-  yield put(updateTodo(response.data));
+  try {
+    const response = yield call(fetchUpdateTodo, action.payload);
+    yield put(updateTodo(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerClearCompletedSaga() {
-  const idsArr = [];
-  const actualArr = yield select(todosArrSelector);
-  for (const todo of actualArr) {
-    if (todo.completed) {
-      idsArr.push(todo.id);
+  try {
+    const idsArr = [];
+    const actualArr = yield select(todosArrSelector);
+    for (const todo of actualArr) {
+      if (todo.completed) {
+        idsArr.push(todo.id);
+      }
     }
+    const response = yield call(fetchClearCompleted, idsArr);
+    yield put(clearCompleted(response.data));
+  } catch (e) {
+    error(e);
   }
-  const response = yield call(fetchClearCompleted, idsArr);
-  yield put(clearCompleted(response.data));
 }
 
 export function* workerToggleAllSaga() {
-  const response = yield call(fetchToggleAll);
-  yield put(toggleAllTodos(response.data));
+  try {
+    const response = yield call(fetchToggleAll);
+    yield put(toggleAllTodos(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerRegistrationSaga(action) {
-  const response = yield call(fetchRegistration, action.payload);
-  localStorage.setItem('accessToken', response.data.accessToken);
-  localStorage.setItem('refreshToken', response.data.refreshToken);
-  yield put(registration(response.data));
+  try {
+    const response = yield call(fetchRegistration, action.payload);
+    localStorage.setItem('accessToken', response.data.accessToken);
+    localStorage.setItem('userId', JSON.stringify(response.data.user.id));
+    yield put(registration(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerLoginSaga(action) {
-  const response = yield call(fetchLogin, action.payload);
-  localStorage.setItem('accessToken', response.data.accessToken);
-  localStorage.setItem('refreshToken', response.data.refreshToken);
-  localStorage.setItem('userId', JSON.stringify(response.data.user.id));
-  yield put(login(response.data));
+  try {
+    const response = yield call(fetchLogin, action.payload);
+    localStorage.setItem('accessToken', response.data.accessToken);
+    localStorage.setItem('userId', JSON.stringify(response.data.user.id));
+    yield put(setUser(response.data.user));
+  } catch (e) {
+    error(e);
+  }
+}
+
+export function* workerLogoutSaga() {
+  try {
+    yield call(fetchLogout);
+    localStorage.clear();
+    yield put(logout());
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* workerCheckAuthSaga() {
-  const response = yield call(fetchRefresh);
-  localStorage.setItem('accessToken', response.data.accessToken);
-  localStorage.setItem('refreshToken', response.data.refreshToken);
-  yield put(checkAuth(response.data.accessToken));
+  try {
+    const response = yield call(fetchRefresh);
+    localStorage.setItem('accessToken', response.data.accessToken);
+    yield put(setUser(response.data.user));
+  } catch (e) {
+    error(e);
+  }
 }
 
-export function* workerLoadUserSaga(action) {
-  const response = yield call(fetchLoadUser, action.payload);
-  yield put(updateStore(response.data));
+export function* workerLoadUserSaga() {
+  try {
+    const response = yield call(fetchLoadUser, localStorage.getItem('userId'));
+    yield put(setUser(response.data));
+  } catch (e) {
+    error(e);
+  }
 }
 
 export function* watchSaga() {
@@ -107,6 +160,7 @@ export function* watchSaga() {
   yield takeEvery('TOGGLE_ALL', workerToggleAllSaga);
   yield takeEvery('SIGN_UP', workerRegistrationSaga);
   yield takeEvery('LOG_IN', workerLoginSaga);
+  yield takeEvery('LOG_OUT', workerLogoutSaga);
   yield takeEvery('CHECK_AUTH', workerCheckAuthSaga);
   yield takeEvery('LOAD_USER', workerLoadUserSaga);
 }

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { Container, Paper } from '@mui/material';
 import styled from '@emotion/styled';
-import TodoInput from '../Input/Input';
+import TodoInput from '../../components/Input/Input';
 
 const StyledAuthorizationInput = styled(TodoInput)`
   height: 30px;
@@ -14,7 +15,7 @@ const StyledAuthorizationInput = styled(TodoInput)`
   margin-top: 10px;
 `;
 
-const SubmitInput = styled.input`
+const SubmitButton = styled.button`
   display: block;
   margin-top: 2rem;
   padding: 5px;
@@ -28,11 +29,15 @@ const SubmitInput = styled.input`
 
 const Form = ({ name, submitForm, linkPath, linkName }) => {
   const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().min(4).max(10).required(),
+    email: yup.string().email().required('Email field is required'),
+    password: yup.string().min(4).max(10).required('Password field is required'),
   });
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -59,8 +64,20 @@ const Form = ({ name, submitForm, linkPath, linkName }) => {
             placeholder="Password..."
             {...register('password')}
           />
-          <SubmitInput type="submit" />
+          <SubmitButton type="submit">Submit</SubmitButton>
         </form>
+
+        <ErrorMessage
+          errors={errors}
+          name="email"
+          render={({ message }) => <p style={{ color: 'red' }}>{message}</p>}
+        />
+        <ErrorMessage
+          errors={errors}
+          name="password"
+          render={({ message }) => <div style={{ color: 'red' }}>{message}</div>}
+        />
+
         <p>
           Or <Link to={linkPath}>{linkName}</Link>
         </p>

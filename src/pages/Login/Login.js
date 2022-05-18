@@ -1,27 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
 
-import Form from '../../components/Form/Form';
+import Form from '../../features/Form/Form';
 
 const Login = () => {
-  const userId = useSelector((state) => state.user.userId);
-  console.log(userId);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const submitForm = async (data) => {
-    dispatch({ type: 'LOG_IN', payload: data });
-    navigate('/', { replace: true });
-  };
+  const userId = useSelector((state) => state.user.userId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem('userId')) {
       navigate('/', { replace: true });
     }
-  }, []);
+  }, [userId]);
 
-  return <Form name="Log in" submitForm={submitForm} linkPath="/signup" linkName="Sign up" />;
+  const submitForm = async (data) => {
+    dispatch({ type: 'LOG_IN', payload: data });
+  };
+
+  return (
+    <>
+      <Form name="Log in" submitForm={submitForm} linkPath="/signup" linkName="Sign up" />;
+    </>
+  );
 };
 
 export default Login;

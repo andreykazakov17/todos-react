@@ -28,7 +28,6 @@ const Form = styled.form`
 
 const AppForm = () => {
   const [inputText, setInputText] = useState('');
-  const user = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
@@ -42,12 +41,9 @@ const AppForm = () => {
 
     dispatch({ type: 'ADD_TODO', payload: inputText });
     setInputText('');
-
-    console.log(user);
   };
 
   const handleToggleAllTodos = () => {
-    // dispatch(toggleAllTodos());
     dispatch({ type: 'TOGGLE_ALL' });
   };
 

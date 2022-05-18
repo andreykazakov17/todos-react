@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Form from '../../components/Form/Form';
+import Form from '../../features/Form/Form';
 
 const Signup = () => {
   const dispatch = useDispatch();
