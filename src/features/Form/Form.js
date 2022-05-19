@@ -58,25 +58,24 @@ const Form = ({ name, submitForm, linkPath, linkName }) => {
         <h1>{name}</h1>
         <form onSubmit={handleSubmit(submitForm)}>
           <StyledAuthorizationInput name="email" placeholder="Email..." {...register('email')} />
+          <ErrorMessage
+            errors={errors}
+            name="email"
+            render={({ message }) => <p style={{ color: 'red' }}>{message}</p>}
+          />
           <StyledAuthorizationInput
             name="password"
             type="password"
             placeholder="Password..."
             {...register('password')}
           />
+          <ErrorMessage
+            errors={errors}
+            name="password"
+            render={({ message }) => <p style={{ color: 'red' }}>{message}</p>}
+          />
           <SubmitButton type="submit">Submit</SubmitButton>
         </form>
-
-        <ErrorMessage
-          errors={errors}
-          name="email"
-          render={({ message }) => <p style={{ color: 'red' }}>{message}</p>}
-        />
-        <ErrorMessage
-          errors={errors}
-          name="password"
-          render={({ message }) => <div style={{ color: 'red' }}>{message}</div>}
-        />
 
         <p>
           Or <Link to={linkPath}>{linkName}</Link>

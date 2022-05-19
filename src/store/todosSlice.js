@@ -8,8 +8,6 @@ const todoSlice = createSlice({
   },
   reducers: {
     getTodos(state, action) {
-      // console.log('actionPayload', action.payload);
-      // const todosArr = action.payload.filter((item) => item.user === localStorage.getItem('user'));
       state.todosArr = action.payload;
     },
     addTodo(state, action) {
@@ -44,7 +42,14 @@ const todoSlice = createSlice({
 
 export const todosArrSelector = (state) => state.todos.todosArr;
 
-export const { getTodos, addTodo, checkTodo, deleteTodo, updateTodo, clearCompleted, toggleAllTodos } =
-  todoSlice.actions;
+export const {
+  getTodos,
+  addTodo,
+  checkTodo,
+  deleteTodo,
+  updateTodo,
+  clearCompleted,
+  toggleAllTodos,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;

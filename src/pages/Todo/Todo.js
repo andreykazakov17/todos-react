@@ -33,7 +33,6 @@ const App = () => {
   useEffect(() => {
     if (localStorage.getItem('userId')) {
       dispatch({ type: 'LOAD_TODOS' });
-      dispatch({ type: 'LOAD_USER' });
     }
   }, []);
 

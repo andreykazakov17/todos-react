@@ -20,10 +20,9 @@ const UnorderedList = styled.ul`
 const TodoList = ({ todosArr, activeFilter }) => (
   <Container>
     <UnorderedList>
-      {filterTodos(todosArr, activeFilter).map((item) => {
-        const { id, text, completed } = item;
-        return <TodoListItem key={id} id={id} text={text} completed={completed} />;
-      })}
+      {filterTodos(todosArr, activeFilter).map(({ id, text, completed }) => (
+        <TodoListItem key={id} id={id} text={text} completed={completed} />
+      ))}
     </UnorderedList>
   </Container>
 );

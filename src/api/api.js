@@ -18,7 +18,6 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.log(error);
     const originalRequest = error.config;
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
       originalRequest._isRetry = true;
@@ -31,15 +30,15 @@ api.interceptors.response.use(
         localStorage.setItem('accessToken', response.data.accessToken);
         return api.request(originalRequest);
       } catch (e) {
-        console.log('Not authorized');
-        const response = await axios({
-          method: 'POST',
-          url: 'http://localhost:5001/logout',
-          withCredentials: true,
-        });
-        if (response) {
-          localStorage.clear();
-          store.dispatch(logout());
+        if (e.response.status === 401) {
+          await axios({
+            method: 'POST',
+            url: 'http://localhost:5001/logout',
+            withCredentials: true,
+          }).then((res) => {
+            localStorage.clear();
+            store.dispatch(logout());
+          });
         }
       }
     }
