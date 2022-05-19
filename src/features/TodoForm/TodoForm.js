@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -44,7 +44,6 @@ const AppForm = () => {
   };
 
   const handleToggleAllTodos = () => {
-    // dispatch(toggleAllTodos());
     dispatch({ type: 'TOGGLE_ALL' });
   };
 

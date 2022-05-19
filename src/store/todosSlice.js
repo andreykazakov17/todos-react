@@ -7,7 +7,7 @@ const todoSlice = createSlice({
     idsArr: [],
   },
   reducers: {
-    getTodos(state = initialState, action) {
+    getTodos(state, action) {
       state.todosArr = action.payload;
     },
     addTodo(state, action) {
@@ -42,7 +42,14 @@ const todoSlice = createSlice({
 
 export const todosArrSelector = (state) => state.todos.todosArr;
 
-export const { addTodo, checkTodo, deleteTodo, updateTodo, clearCompleted, toggleAllTodos } =
-  todoSlice.actions;
+export const {
+  getTodos,
+  addTodo,
+  checkTodo,
+  deleteTodo,
+  updateTodo,
+  clearCompleted,
+  toggleAllTodos,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;

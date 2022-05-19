@@ -12,8 +12,8 @@ const StyledFilterActionButton = styled(ActionButton)`
   font-size: 10px;
   min-height: 30px;
   border-radius: 10px;
-  display: flex,
-  align-items: center
+  display: flex;
+  align-items: center;
 `;
 
 const StyledClearActionButton = styled(ActionButton)`
