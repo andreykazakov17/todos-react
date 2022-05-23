@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import styled from '@emotion/styled';
 import Paper from '@mui/material/Paper';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,11 @@ import TodoInput from '../../components/Input/Input';
 import CheckIcon from '../../icons/CheckIcon';
 import TrashIcon from '../../icons/TrashIcon';
 
-const ListItem = styled.li`
+interface LiProps {
+  completed: boolean;
+}
+
+const ListItem = styled.li<LiProps>`
   position: relative;
   padding: 0rem 0.5rem;
   height: auto;
@@ -61,7 +65,13 @@ const StyledTrashActionButton = styled(ActionButton)`
   right: 16px;
 `;
 
-const TodoListItem = ({ id, text, completed }) => {
+interface TodoListItemProps {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+const TodoListItem = ({ id, text, completed }: TodoListItemProps) => {
   const dispatch = useDispatch();
 
   const [isActiveInput, setIsActiveInput] = useState(false);
@@ -77,7 +87,7 @@ const TodoListItem = ({ id, text, completed }) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
-  const handleUpdateTodo = (e) => {
+  const handleUpdateTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'UPDATE_TODO', payload: { id, value: e.target.value } });
   };
 

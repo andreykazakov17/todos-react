@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
@@ -26,15 +26,15 @@ const Form = styled.form`
   margin: 0 auto;
 `;
 
-const AppForm = () => {
+const TodoForm = () => {
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!inputText) return;
@@ -65,4 +65,4 @@ const AppForm = () => {
   );
 };
 
-export default AppForm;
+export default TodoForm;

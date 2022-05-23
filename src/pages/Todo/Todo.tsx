@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from '../../types/hooks';
 import styled from '@emotion/styled';
 
 import Header from '../../components/Header/Header';

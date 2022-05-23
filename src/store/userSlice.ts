@@ -1,20 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IUser } from 'types/user';
+import { IUserState } from 'types/state';
+
+export const initialState: IUserState = {
+  userId: '',
+  email: '',
+};
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    userId: '',
-    email: '',
-  },
+  initialState,
   reducers: {
-    registration(state, action) {
+    registration(state, action: PayloadAction<IUser>) {
       state.email = action.payload.email;
     },
-    setUser(state, action) {
+    setUser(state, action: PayloadAction<IUser>) {
       state.email = action.payload.email;
       state.userId = action.payload.id;
     },
-    logout(state, action) {
+    logout(state) {
       state.email = '';
       state.userId = '';
     },

@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { logout } from '../store/userSlice';
 import store from '../store/index';
+import { IUpdateTodoRecord, IUserRecord } from 'types/record';
 
 const api = axios.create({
   withCredentials: true,
@@ -11,6 +12,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  if (config.headers === undefined) {
+    config.headers = {};
+  }
   config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
   return config;
 });
@@ -30,7 +34,7 @@ api.interceptors.response.use(
         localStorage.setItem('accessToken', response.data.accessToken);
         return api.request(originalRequest);
       } catch (e) {
-        if (e.response.status === 401) {
+        if (e instanceof AxiosError && e?.response?.status === 401) {
           await axios({
             method: 'POST',
             url: 'http://localhost:5001/logout',
@@ -46,22 +50,25 @@ api.interceptors.response.use(
   },
 );
 
-export const fetchRegistration = (payload) =>
+export const fetchRegistration = (payload: IUserRecord) =>
   api({ method: 'POST', url: '/registration', data: payload });
-export const fetchLogin = (payload) => api({ method: 'POST', url: '/login', data: payload });
+export const fetchLogin = (payload: IUserRecord) =>
+  api({ method: 'POST', url: '/login', data: payload });
 export const fetchRefresh = () => api({ method: 'GET', url: '/refresh' });
 export const fetchLogout = () => api({ method: 'POST', url: '/logout' });
-export const fetchLoadUser = async (payload) =>
+export const fetchLoadUser = async (payload: string) =>
   api({ method: 'POST', url: '/user', data: payload });
 
 export const fetchGetTodos = async () => api({ method: 'GET', url: '/todos' });
-export const fetchAddTodo = async (text) => api({ method: 'POST', url: '/todos', data: text });
-export const fetchCheckTodo = async (id) => api({ method: 'PATCH', url: `/todos/${id}`, data: id });
-export const fetchDeleteTodo = async (id) =>
+export const fetchAddTodo = async (text: string) =>
+  api({ method: 'POST', url: '/todos', data: text });
+export const fetchCheckTodo = async (id: string) =>
+  api({ method: 'PATCH', url: `/todos/${id}`, data: id });
+export const fetchDeleteTodo = async (id: string) =>
   api({ method: 'DELETE', url: `/todos/${id}`, data: id });
-export const fetchUpdateTodo = async ({ id, value }) =>
+export const fetchUpdateTodo = async ({ id, value }: IUpdateTodoRecord) =>
   api({ method: 'POST', url: `/todos/${id}`, data: { id, value } });
-export const fetchClearCompleted = async (action) =>
+export const fetchClearCompleted = async (action: Array<string>) =>
   api({ method: 'POST', url: `/todos/clearAll`, data: action });
 
 export const fetchToggleAll = async () => api({ method: 'PATCH', url: '/todos' });

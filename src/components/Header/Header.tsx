@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {FC} from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -17,7 +16,12 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Header = ({ onClick, user }) => (
+interface HeaderProps {
+  onClick: () => void;
+  user: string;
+}
+
+const Header: FC<HeaderProps> = ({ onClick, user }) => (
   <AppBar
     position="static"
     color="default"

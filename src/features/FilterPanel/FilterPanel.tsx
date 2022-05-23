@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { onFilterChange } from '../../store/filterSlice';
 
 import ActionButton from '../../components/Button/Button';
+import { ITodo } from 'types/todo';
 
 const filtersArr = ['All', 'Active', 'Completed'];
 
@@ -51,14 +52,19 @@ const Nav = styled.nav`
   margin: 0;
 `;
 
-const FilterPanel = ({ todosArr, activeFilter }) => {
+interface IFilterPanel {
+  todosArr: ITodo[];
+  activeFilter: string;
+}
+
+const FilterPanel = ({ todosArr, activeFilter }: IFilterPanel) => {
   const dispatch = useDispatch();
 
   if (!todosArr.length) {
     return null;
   }
 
-  const handleActiveFilter = (filter) => {
+  const handleActiveFilter = (filter: string) => {
     dispatch(onFilterChange(filter));
   };
 

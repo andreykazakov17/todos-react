@@ -8,7 +8,7 @@ import './index.css';
 import App from './pages/App';
 
 const container = document.getElementById('root');
-const root = createRoot(container);
+const root = createRoot(container!);
 root.render(
   <BrowserRouter>
     <Provider store={store}>

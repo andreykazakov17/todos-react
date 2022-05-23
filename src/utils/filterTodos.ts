@@ -1,8 +1,10 @@
-const filterTodos = (items, filter) => {
+import { ITodo } from '../types/todo';
+
+const filterTodos = (items: ITodo[], filter: string) => {
   switch (filter) {
-    case "Active":
+    case 'Active':
       return items.filter((item) => !item.completed);
-    case "Completed":
+    case 'Completed':
       return items.filter((item) => item.completed);
     default:
       return items;

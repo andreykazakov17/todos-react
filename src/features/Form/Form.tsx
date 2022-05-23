@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { Container, Paper } from '@mui/material';
 import styled from '@emotion/styled';
 import TodoInput from '../../components/Input/Input';
+import { IUserRecord } from 'types/record';
 
 const StyledAuthorizationInput = styled(TodoInput)`
   height: 30px;
@@ -27,7 +28,19 @@ const SubmitButton = styled.button`
   color: white;
 `;
 
-const Form = ({ name, submitForm, linkPath, linkName }) => {
+interface IForm {
+  name: string;
+  submitForm: (data: IUserRecord) => void;
+  linkPath: string;
+  linkName: string;
+}
+
+interface FormValues {
+  email: string;
+  password: string;
+}
+
+const Form = ({ name, submitForm, linkPath, linkName }: IForm) => {
   const schema = yup.object().shape({
     email: yup.string().email().required('Email field is required'),
     password: yup.string().min(4).max(10).required('Password field is required'),
@@ -37,7 +50,7 @@ const Form = ({ name, submitForm, linkPath, linkName }) => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
 
@@ -57,17 +70,17 @@ const Form = ({ name, submitForm, linkPath, linkName }) => {
       >
         <h1>{name}</h1>
         <form onSubmit={handleSubmit(submitForm)}>
-          <StyledAuthorizationInput name="email" placeholder="Email..." {...register('email')} />
+          <StyledAuthorizationInput {...register('email')} name="email" placeholder="Email..." />
           <ErrorMessage
             errors={errors}
             name="email"
             render={({ message }) => <p style={{ color: 'red' }}>{message}</p>}
           />
           <StyledAuthorizationInput
+            {...register('password')}
             name="password"
             type="password"
             placeholder="Password..."
-            {...register('password')}
           />
           <ErrorMessage
             errors={errors}

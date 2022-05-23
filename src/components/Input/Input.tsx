@@ -1,7 +1,11 @@
 import styled from '@emotion/styled';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-const TodoInput = styled(OutlinedInput)`
+interface InputProps {
+  text?: string;
+}
+
+const TodoInput = styled(OutlinedInput)<InputProps>`
   font-size: 16px;
   border: none;
   background: #fff;
