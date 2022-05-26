@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IFilterState } from 'types/state';
+import { IFilterState } from 'store/storeTypes/state';
 
 const initialState: IFilterState = {
   activeFilter: 'All',

@@ -1,5 +1,4 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'types/hooks';
 
 import Form from '../../features/Form/Form';

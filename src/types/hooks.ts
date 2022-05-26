@@ -4,7 +4,7 @@ import {
   useDispatch as _useDispatch,
 } from 'react-redux';
 import { StoreUserActions, StoreTodosActions } from './actions';
-import { IRootState } from './state';
+import { IRootState } from '../store/storeTypes/state';
 
 type StoreActions = StoreUserActions | StoreTodosActions;
 

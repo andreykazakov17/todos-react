@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
 import { onFilterChange } from '../../store/filterSlice';
@@ -6,50 +6,58 @@ import { onFilterChange } from '../../store/filterSlice';
 import ActionButton from '../../components/Button/Button';
 import { ITodo } from 'types/todo';
 
-const filtersArr = ['All', 'Active', 'Completed'];
+// const filtersArr = ['All', 'Active', 'Completed'];
+
+enum Filter {
+  ALL = 'All',
+  ACTIVE = 'Active',
+  COMPLETED = 'Completed',
+}
+
+const filters = [Filter.ALL, Filter.ACTIVE, Filter.COMPLETED];
 
 const StyledFilterActionButton = styled(ActionButton)`
-  min-width: 90px;
-  font-size: 10px;
-  min-height: 30px;
-  border-radius: 10px;
   display: flex;
   align-items: center;
+  min-width: 90px;
+  min-height: 30px;
+  font-size: 10px;
+  border-radius: 10px;
 `;
 
 const StyledClearActionButton = styled(ActionButton)`
   min-width: 90px;
-  font-size: 10px;
   min-height: 30px;
+  font-size: 10px;
   border-radius: 10px;
 `;
 
 const Wrapper = styled.div`
-  visibility: visible;
-  height: 2rem;
-  width: 40rem;
-  margin: 50px auto;
-  background: white;
-  color: black;
-  border-radius: 10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  height: 2rem;
+  width: 40rem;
+  margin: 50px auto;
+  visibility: visible;
+  background: white;
+  color: black;
+  border-radius: 10px;
 `;
 
 const Counter = styled.div`
-  font-size: 14px;
   width: 100px;
+  font-size: 14px;
 `;
 
 const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  list-style: none;
   padding: 0rem;
-  width: 290px;
   margin: 0;
+  width: 290px;
+  list-style: none;
 `;
 
 interface IFilterPanel {
@@ -76,7 +84,7 @@ const FilterPanel = ({ todosArr, activeFilter }: IFilterPanel) => {
     <Wrapper>
       <Counter>Total: {todosArr.length}</Counter>
       <Nav>
-        {filtersArr.map((filter) => (
+        {filters.map((filter) => (
           <StyledFilterActionButton
             key={filter}
             variant={filter === activeFilter ? 'contained' : 'outlined'}

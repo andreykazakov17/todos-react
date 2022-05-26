@@ -1,11 +1,17 @@
+import { FC } from 'react';
 import { ITodo } from '../types/todo';
 
-const filterTodos = (items: ITodo[], filter: string) => {
-  switch (filter) {
+// interface IFilterTodos {
+//   items: ITodo[] | ITodo;
+//   activeFilter: string;
+// }
+
+const filterTodos = (items: ITodo[], activeFilter: string) => {
+  switch (activeFilter) {
     case 'Active':
-      return items.filter((item) => !item.completed);
+      return items.filter((item: ITodo) => !item.completed);
     case 'Completed':
-      return items.filter((item) => item.completed);
+      return items.filter((item: ITodo) => item.completed);
     default:
       return items;
   }

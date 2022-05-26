@@ -1,8 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { ReactNode } from 'react';
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
-
-import { IButton } from '../../types/button';
 
 interface ButtonProps {
   type?: string;
@@ -18,7 +17,7 @@ interface ButtonProps {
     | undefined;
   className?: string;
   size?: string;
-  children: React.ReactNode | string;
+  children: ReactNode;
   onClick?: () => void;
 }
 
@@ -29,7 +28,7 @@ const StyledButton = styled(Button)`
   color: ${(props) => props.color};
 `;
 
-const ActionButton: FC<ButtonProps> = ({ variant, color, className, children, onClick }) => (
+const ActionButton = ({ variant, color, className, children, onClick }: ButtonProps) => (
   <StyledButton variant={variant} color={color} className={className} onClick={onClick}>
     {children}
   </StyledButton>

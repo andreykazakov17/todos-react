@@ -5,7 +5,7 @@ import { IUpdateTodoRecord, IUserRecord } from 'types/record';
 
 const api = axios.create({
   withCredentials: true,
-  baseURL: 'http://localhost:5001',
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

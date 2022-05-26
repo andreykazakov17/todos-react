@@ -1,6 +1,6 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { ITodo } from '../types/todo';
-import { IRootState, ITodosState } from '../types/state';
+import { IRootState, ITodosState } from './storeTypes/state';
 
 const initialState: ITodosState = {
   todosArr: [],

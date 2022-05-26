@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 
 import TodoListItem from '../TodoListItem/TodoListItem';
@@ -11,26 +11,33 @@ const Container = styled.div`
 `;
 
 const UnorderedList = styled.ul`
-  padding: 0;
-  list-style: none;
+  position: relative;
   display: block;
   margin: 0 auto;
-  position: relative;
+  padding: 0;
+  list-style: none;
 `;
 
 interface ITodoList {
   todosArr: ITodo[];
   activeFilter: string;
+  selectedTodo: string;
 }
 
-const TodoList = ({ todosArr, activeFilter }: ITodoList) => (
-  <Container>
-    <UnorderedList>
-      {filterTodos(todosArr, activeFilter).map(({ id, text, completed }: ITodo) => {
-        return <TodoListItem key={id} id={id} text={text} completed={completed} />;
-      })}
-    </UnorderedList>
-  </Container>
-);
+const TodoList = ({ todosArr, activeFilter, selectedTodo }: ITodoList) => {
+  const found = todosArr.filter((item) => item.id === selectedTodo);
+  const filtered =
+    selectedTodo !== '' ? filterTodos(found, activeFilter) : filterTodos(todosArr, activeFilter);
+
+  return (
+    <Container>
+      <UnorderedList>
+        {filtered.map(({ id, text, completed }: ITodo) => {
+          return <TodoListItem key={id} id={id} text={text} completed={completed} />;
+        })}
+      </UnorderedList>
+    </Container>
+  );
+};
 
 export default TodoList;
