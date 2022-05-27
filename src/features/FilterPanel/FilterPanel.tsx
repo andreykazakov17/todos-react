@@ -6,8 +6,6 @@ import { onFilterChange } from '../../store/filterSlice';
 import ActionButton from '../../components/Button/Button';
 import { ITodo } from 'types/todo';
 
-// const filtersArr = ['All', 'Active', 'Completed'];
-
 enum Filter {
   ALL = 'All',
   ACTIVE = 'Active',
