@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent, memo } from 'react';
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import ActionButton from '../../components/Button/Button';
 import TodoInput from '../../components/Input/Input';
 
 const FormInput = styled(TodoInput)`
-  border-radius: 10px;
   width: 250px;
+  border-radius: 10px;
 `;
 
 const FormPanelBtn = styled(ActionButton)`
   height: 50px;
   width: 80px;
-  border-radius: 10px;
   font-size: 12px;
+  border-radius: 10px;
 `;
 
 const Form = styled.form`
-  height: 20vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 450px;
   margin: 0 auto;
+  height: 20vh;
+  width: 450px;
 `;
 
-const AppForm = () => {
+const TodoForm = memo(() => {
   const [inputText, setInputText] = useState('');
   const dispatch = useDispatch();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!inputText) return;
@@ -63,6 +63,6 @@ const AppForm = () => {
       </FormPanelBtn>
     </Form>
   );
-};
+});
 
-export default AppForm;
+export default TodoForm;

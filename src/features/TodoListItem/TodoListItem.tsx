@@ -8,21 +8,25 @@ import TodoInput from '../../components/Input/Input';
 import CheckIcon from '../../icons/CheckIcon';
 import TrashIcon from '../../icons/TrashIcon';
 
-const ListItem = styled.li`
+interface LiProps {
+  completed: boolean;
+}
+
+const ListItem = styled.li<LiProps>`
   position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0.5rem;
   padding: 0rem 0.5rem;
   height: auto;
   width: 25rem;
-  margin: 0.5rem;
-  background: white;
-  color: black;
   font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   border-radius: 25px;
   border-color: 2e7d32;
   border-width: 1px;
+  background: white;
+  color: black;
   word-break: break-all;
   transition: all 0.5s ease;
   ${(props) =>
@@ -34,11 +38,11 @@ const ListItem = styled.li`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  color: rgb(0, 0, 0);
-  cursor: pointer;
   min-width: 255px;
+  color: rgb(0, 0, 0);
   border: none;
   user-select: none;
+  cursor: pointer;
 `;
 
 const Text = styled.div`
@@ -55,13 +59,19 @@ const StyledActionButton = styled(ActionButton)`
 `;
 
 const StyledTrashActionButton = styled(ActionButton)`
+  position: absolute;
   min-width: 80px;
   height: 100%;
-  position: absolute;
   right: 16px;
 `;
 
-const TodoListItem = ({ id, text, completed }) => {
+interface TodoListItemProps {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+const TodoListItem = ({ id, text, completed }: TodoListItemProps) => {
   const dispatch = useDispatch();
 
   const [isActiveInput, setIsActiveInput] = useState(false);
@@ -77,7 +87,7 @@ const TodoListItem = ({ id, text, completed }) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
-  const handleUpdateTodo = (e) => {
+  const handleUpdateTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'UPDATE_TODO', payload: { id, value: e.target.value } });
   };
 

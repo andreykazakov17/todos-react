@@ -1,19 +1,23 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { ITodo } from '../types/todo';
+import { IRootState, ITodosState } from './storeTypes/state';
+
+const initialState: ITodosState = {
+  todosArr: [],
+  idsArr: [],
+};
 
 const todoSlice = createSlice({
   name: 'todos',
-  initialState: {
-    todosArr: [],
-    idsArr: [],
-  },
+  initialState,
   reducers: {
-    getTodos(state, action) {
+    getTodos(state, action: PayloadAction<ITodo[]>) {
       state.todosArr = action.payload;
     },
-    addTodo(state, action) {
+    addTodo(state, action: PayloadAction<ITodo>) {
       state.todosArr.push(action.payload);
     },
-    checkTodo(state, action) {
+    checkTodo(state, action: PayloadAction<string>) {
       const todosArr = current(state.todosArr);
       todosArr.forEach((item, index) => {
         if (item.id === action.payload) {
@@ -21,26 +25,26 @@ const todoSlice = createSlice({
         }
       });
     },
-    deleteTodo(state, action) {
+    deleteTodo(state, action: PayloadAction<string>) {
       const todosArr = current(state.todosArr);
       const index = todosArr.findIndex((todo) => todo.id === action.payload);
       state.todosArr.splice(index, 1);
     },
-    updateTodo(state, action) {
+    updateTodo(state, action: PayloadAction<ITodo>) {
       const todosArr = current(state.todosArr);
       const index = todosArr.findIndex((todo) => todo.id === action.payload.id);
       state.todosArr.splice(index, 1, action.payload);
     },
-    clearCompleted(state, action) {
+    clearCompleted(state, action: PayloadAction<ITodo[]>) {
       state.todosArr = action.payload;
     },
-    toggleAllTodos(state, action) {
+    toggleAllTodos(state, action: PayloadAction<ITodo[]>) {
       state.todosArr = action.payload;
     },
   },
 });
 
-export const todosArrSelector = (state) => state.todos.todosArr;
+export const todosArrSelector = (state: IRootState) => state.todos.todosArr;
 
 export const {
   getTodos,
