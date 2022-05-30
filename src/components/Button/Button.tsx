@@ -1,5 +1,5 @@
-import React from 'react';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+
 import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
 
@@ -22,7 +22,7 @@ interface ButtonProps {
 }
 
 const StyledButton = styled(Button)`
-  min-width: 80px;
+  min-width: 10px;
   font-size: 18px;
   cursor: pointer;
   color: ${(props) => props.color};

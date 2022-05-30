@@ -1,11 +1,6 @@
 import { FC } from 'react';
 import { ITodo } from '../types/todo';
 
-// interface IFilterTodos {
-//   items: ITodo[] | ITodo;
-//   activeFilter: string;
-// }
-
 const filterTodos = (items: ITodo[], activeFilter: string) => {
   switch (activeFilter) {
     case 'Active':
