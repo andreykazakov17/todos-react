@@ -5,6 +5,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 interface InputProps {
   text?: string;
   error?: boolean;
+  inputColor?: string;
 }
 
 const TodoInput = styled(OutlinedInput)<InputProps>`
