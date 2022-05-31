@@ -2,16 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-interface IStyleProps {
-  fontWeight: string;
-  opacity: string;
-}
-
 interface InputProps {
   text?: string;
   error?: boolean;
   inputColor?: string;
-  style?: IStyleProps;
 }
 
 const TodoInput = styled(OutlinedInput)<InputProps>`

@@ -64,7 +64,7 @@ const App = () => {
   );
 
   const onChangeDropdown = (value: string | null) => {
-    setSelectedTodoId(value !== null ? value : '');
+    setSelectedTodoId(value);
   };
 
   return (

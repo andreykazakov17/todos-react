@@ -8,7 +8,7 @@ import Clear from 'icons/svg/Clear';
 import ArrowDown from '../../icons/svg/ArrowDown';
 
 interface IExpandButtonStyleProps {
-  transform: string;
+  isOpen: boolean;
 }
 
 const StyledExpandListButton = styled(ActionButton)<IExpandButtonStyleProps>`
@@ -19,7 +19,7 @@ const StyledExpandListButton = styled(ActionButton)<IExpandButtonStyleProps>`
   transform: translateY(-50%);
   width: 30px;
   height: 30px;
-  transform: ${({ transform }) => transform};
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : null)};
   transform-origin: 50% 25%;
 `;
 
@@ -33,6 +33,10 @@ const StyledClearButton = styled(ActionButton)`
   height: 30px;
 `;
 
+// interface IDropdownInputProps {
+//   isOpen: boolean;
+// }
+
 const StyledDropdownInput = styled(TodoInput)`
   z-index: 1;
   height: 40px;
@@ -40,11 +44,6 @@ const StyledDropdownInput = styled(TodoInput)`
   font-size: 14px;
   color: #000000;
   max-width: 150px;
-  ::placeholder,
-  ::-webkit-input-placeholder {
-    opacity: ${(props) => props.style?.opacity || '70%'};
-    font-weight: ${(props) => props.style?.fontWeight || 'regular'};
-  }
   &:hover {
     border-color: orange;
   }
@@ -106,129 +105,117 @@ interface IOptions {
 interface IDropdown {
   options: IOptions[];
   isVisible: boolean;
-  value: string;
-  placeholder?: string;
+  value: string | null;
   onChange: (value: string | null) => void;
   setIsVisible: (value: boolean) => void;
 }
 
-const Dropdown = memo(
-  ({
-    value,
-    options,
-    isVisible,
-    onChange,
-    setIsVisible,
-    placeholder = 'Select One',
-  }: IDropdown) => {
-    const [query, setQuery] = useState('');
-    const option = options.find((item) => item.id === value);
-    const popupRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
+const Dropdown = memo(({ value, options, isVisible, onChange, setIsVisible }: IDropdown) => {
+  const [query, setQuery] = useState('');
+  const option = useMemo(() => options.find((item) => item.id === value), [value, options]);
+  const popupRef = useRef<HTMLDivElement>(null);
+  console.log('isVisible', isVisible);
 
-    const handleHideDropdown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsVisible(false);
-        setQuery('');
-      }
+  useEffect(() => {
+    if (option) {
+      setQuery(option.name);
+    }
+  }, [option]);
+
+  const clearDropdownInput = () => {
+    setIsVisible(false);
+    setQuery('');
+  };
+
+  const handleHideDropdown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      clearDropdownInput();
+    }
+  };
+
+  const handleClickOutside = (e: Event) => {
+    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+      clearDropdownInput();
+    }
+  };
+
+  const addEventListeners = () => {
+    document.addEventListener('keydown', handleHideDropdown, true);
+    document.addEventListener('click', handleClickOutside, true);
+  };
+
+  const removeEventListeners = () => {
+    document.removeEventListener('keydown', handleHideDropdown, true);
+    document.removeEventListener('click', handleClickOutside, true);
+  };
+
+  useEffect(() => {
+    addEventListeners();
+
+    return () => {
+      removeEventListeners();
     };
+  });
 
-    const handleClickOutside = (e: Event) => {
-      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-        setIsVisible(false);
-        setQuery('');
-      }
-    };
+  const filteredOption = useMemo(
+    () =>
+      query
+        ? options.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+        : options,
+    [options, query],
+  );
 
-    const addEventListeners = () => {
-      document.addEventListener('keydown', handleHideDropdown, true);
-      document.addEventListener('click', handleClickOutside, true);
-    };
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
 
-    const removeEventListeners = () => {
-      document.removeEventListener('keydown', handleHideDropdown, true);
-      document.removeEventListener('click', handleClickOutside, true);
-    };
+  const handleClear = () => {
+    onChange('');
+    setQuery('');
+  };
 
-    useEffect(() => {
-      addEventListeners();
+  const handleClick = () => {
+    setIsVisible(!isVisible);
+  };
 
-      return () => {
-        removeEventListeners();
-      };
-    });
-
-    const filteredOption = useMemo(
-      () =>
-        query
-          ? options.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
-          : options,
-      [options, query],
-    );
-
-    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-      setQuery(e.target.value);
-    };
-
-    const handleClear = () => {
-      onChange(null);
-      setQuery('');
-      if (inputRef.current) {
-        inputRef.current.value = '';
-        inputRef.current.focus();
-      }
-    };
-
-    const handleClick = () => {
-      setIsVisible(!isVisible);
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    return (
-      <StyledDropdownWrapper ref={popupRef} onClick={handleClick}>
-        <StyledDropdownInput
-          inputRef={inputRef}
-          type="text"
-          placeholder={option ? option.name : placeholder}
-          style={value ? { fontWeight: 'bold', opacity: '100%' } : undefined}
-          onChange={handleSearch}
-        />
-        <StyledPopup>
-          {isVisible ? (
-            <StyledUL>
-              {filteredOption.map((item) => (
-                <StyledLI
-                  key={item.id}
-                  id={item.id}
-                  isSelected={item.id === value}
-                  onClick={() => {
-                    onChange(item.id);
-                    if (inputRef.current) {
-                      inputRef.current.value = item.name;
-                    }
-                  }}
-                >
-                  {item.name}
-                </StyledLI>
-              ))}
-            </StyledUL>
-          ) : null}
-        </StyledPopup>
-        <SubstrateLayerDiv>
-          <StyledExpandListButton transform={isVisible ? 'rotate(180deg)' : null}>
-            <ArrowDown />
-          </StyledExpandListButton>
-          {value ? (
-            <StyledClearButton onClick={handleClear}>
-              <Clear />
-            </StyledClearButton>
-          ) : null}
-        </SubstrateLayerDiv>
-      </StyledDropdownWrapper>
-    );
-  },
-);
+  return (
+    <StyledDropdownWrapper ref={popupRef} onClick={handleClick}>
+      <StyledDropdownInput
+        value={query}
+        type="text"
+        placeholder="Select One"
+        onChange={handleSearch}
+      />
+      <StyledPopup>
+        {isVisible ? (
+          <StyledUL>
+            {filteredOption.map((item) => (
+              <StyledLI
+                key={item.id}
+                id={item.id}
+                isSelected={item.id === value}
+                onClick={() => {
+                  onChange(item.id);
+                }}
+              >
+                {item.name}
+              </StyledLI>
+            ))}
+          </StyledUL>
+        ) : null}
+      </StyledPopup>
+      <SubstrateLayerDiv>
+        <StyledExpandListButton isOpen={isVisible}>
+          <ArrowDown />
+        </StyledExpandListButton>
+        {value ? (
+          <StyledClearButton onClick={handleClear}>
+            <Clear />
+          </StyledClearButton>
+        ) : null}
+      </SubstrateLayerDiv>
+    </StyledDropdownWrapper>
+  );
+});
 
 export default Dropdown;

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import { ITodo } from 'types/todo';
 import TodoListItem from '../TodoListItem/TodoListItem';
 import filterTodos from '../../utils/filterTodos';
-import { ITodo } from 'types/todo';
 
 const Container = styled.div`
   display: flex;
@@ -21,20 +21,21 @@ const UnorderedList = styled.ul`
 interface ITodoList {
   todosArr: ITodo[];
   activeFilter: string;
-  selectedTodo: string;
+  selectedTodo: string | null;
 }
 
 const TodoList = ({ todosArr, activeFilter, selectedTodo }: ITodoList) => {
   const found = todosArr.filter((item) => item.id === selectedTodo);
-  const filtered =
-    selectedTodo !== '' ? filterTodos(found, activeFilter) : filterTodos(todosArr, activeFilter);
+  const filtered = selectedTodo
+    ? filterTodos(found, activeFilter)
+    : filterTodos(todosArr, activeFilter);
 
   return (
     <Container>
       <UnorderedList>
-        {filtered.map(({ id, text, completed }: ITodo) => {
-          return <TodoListItem key={id} id={id} text={text} completed={completed} />;
-        })}
+        {filtered.map(({ id, text, completed }: ITodo) => (
+          <TodoListItem key={id} id={id} text={text} completed={completed} />
+        ))}
       </UnorderedList>
     </Container>
   );
