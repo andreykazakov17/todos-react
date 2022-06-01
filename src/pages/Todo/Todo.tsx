@@ -9,6 +9,7 @@ import Header from '../../components/Header/Header';
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
 import FilterPanel from '../../features/FilterPanel/FilterPanel';
+import Table from '../../features/Table/Table';
 
 const StyledShowAllButton = styled(ActionButton)`
   position: absolute;
@@ -81,8 +82,9 @@ const App = () => {
         />
         <TodoH1>todos</TodoH1>
         <TodoForm />
-        <TodoList selectedTodo={selectedTodoId} todosArr={todosArr} activeFilter={activeFilter} />
-        <FilterPanel todosArr={todosArr} activeFilter={activeFilter} />
+        {/* <TodoList selectedTodo={selectedTodoId} todosArr={todosArr} activeFilter={activeFilter} />
+        <FilterPanel todosArr={todosArr} activeFilter={activeFilter} /> */}
+        <Table todos={todosArr} />
       </TodoMainDiv>
     </>
   );
