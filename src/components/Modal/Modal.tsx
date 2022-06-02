@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import ActionButton from '../Button/Button';
 
-const StyledModal = styled.div`
+const StyledModalBackground = styled.div`
   z-index: 5;
   position: fixed;
   top: 0;
@@ -33,52 +33,87 @@ const StyledModal = styled.div`
   }
 `;
 
-const StyledModalContent = styled.div`
+const StyledModalBody = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   border-radius: 12px;
   background-color: white;
   width: 400px;
-  height: 150px;
+  height: 280px;
   transition: 0.5s all;
   pointer-events: all;
 `;
 
 const StyledModalTitle = styled.div`
   padding: 5px;
+  width: 65%;
+  text-align: center;
   margin-bottom: 15px;
-  font-size: 16px;
+  font-size: 24px;
   color: #111827;
-  pointer-events: all;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: normal;
+  font-weight: 800;
 `;
 
-interface IModal {
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  width: 200px;
+`;
+
+const StyledCloseModalButton = styled(ActionButton)`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 15px;
+`;
+
+const StyledModalText = styled.div`
+  width: 75%;
+  text-align: center;
+`;
+
+interface IModalProps {
   id: string | null;
-  setIsOpen: (value: boolean) => void;
-  onDelete: (value: string | null) => void;
-  setTodoId: (value: string | null) => void;
+  title: string;
+  onClose: (value: boolean) => void;
+  onConfirmClick: (value: string | null) => void;
+  onDiscardClick: (value: string | null) => void;
 }
 
-const Modal = ({ id, setIsOpen, onDelete, setTodoId }: IModal) => (
-  <StyledModal
-    onClick={() => {
-      setIsOpen(false);
-      setTodoId(null);
-    }}
-  >
-    <StyledModalContent onClick={(e) => e.stopPropagation()}>
-      <StyledModalTitle>Do you really want to delete todo?</StyledModalTitle>
-      <ActionButton color="error" onClick={() => onDelete(id)}>
-        Delete
-      </ActionButton>
-    </StyledModalContent>
-  </StyledModal>
+const Modal = ({ id, title, onClose, onConfirmClick, onDiscardClick }: IModalProps) => (
+  <StyledModalBackground>
+    <StyledModalBody onClick={(e) => e.stopPropagation()}>
+      <StyledCloseModalButton
+        color="error"
+        onClick={() => {
+          onClose(false);
+          onDiscardClick(null);
+        }}
+      >
+        X
+      </StyledCloseModalButton>
+      <StyledModalTitle>{title}</StyledModalTitle>
+      <StyledModalText>This will remove the given element permanently</StyledModalText>
+      <StyledButtonWrapper>
+        <ActionButton color="secondary" onClick={() => onClose(false)}>
+          Cancel
+        </ActionButton>
+        <ActionButton
+          color="error"
+          onClick={() => {
+            onConfirmClick(id);
+            onClose(false);
+          }}
+        >
+          Delete
+        </ActionButton>
+      </StyledButtonWrapper>
+    </StyledModalBody>
+  </StyledModalBackground>
 );
 
 export default Modal;
