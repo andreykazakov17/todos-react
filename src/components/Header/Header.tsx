@@ -1,8 +1,17 @@
-import React, { memo } from 'react';
+import React, { memo, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import AppBar from '@mui/material/AppBar';
+
+const StyledAppBar = styled(AppBar)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 25px;
+  box-shadow: inner 10px 5px 5px red;
+`;
 
 const StyledLink = styled(Link)`
   display: flex;
@@ -19,27 +28,17 @@ const StyledLink = styled(Link)`
 interface HeaderProps {
   onClick: () => void;
   user: string;
+  children: ReactNode;
 }
 
-const Header = memo(({ onClick, user }: HeaderProps) => {
-  return (
-    <AppBar
-      position="static"
-      color="default"
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: '10px 25px',
-        boxShadow: 'inner 10px 5px 5px red',
-      }}
-    >
-      <StyledLink onClick={onClick} to="/signup">
-        Log out
-      </StyledLink>
-      <div>User: {user}</div>
-    </AppBar>
-  );
-});
+const Header = memo(({ onClick, user, children }: HeaderProps) => (
+  <StyledAppBar position="static" color="default">
+    <StyledLink onClick={onClick} to="/signup">
+      Log out
+    </StyledLink>
+    {children}
+    <div>User: {user}</div>
+  </StyledAppBar>
+));
 
 export default Header;

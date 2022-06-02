@@ -2,7 +2,6 @@
 import React, { ChangeEvent, memo, useEffect, useMemo, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 
-import TodoInput from 'components/Input/Input';
 import ActionButton from 'components/Button/Button';
 import Clear from 'icons/svg/Clear';
 import ArrowDown from '../../icons/svg/ArrowDown';
@@ -10,6 +9,16 @@ import ArrowDown from '../../icons/svg/ArrowDown';
 interface IExpandButtonStyleProps {
   isOpen: boolean;
 }
+
+const StyledDropdownWrapper = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  width: 230px;
+  height: 40px;
+  left: 200px;
+`;
 
 const StyledExpandListButton = styled(ActionButton)<IExpandButtonStyleProps>`
   z-index: 1;
@@ -33,19 +42,22 @@ const StyledClearButton = styled(ActionButton)`
   height: 30px;
 `;
 
-// interface IDropdownInputProps {
-//   isOpen: boolean;
-// }
-
-const StyledDropdownInput = styled(TodoInput)`
+const StyledDropdownInput = styled.input`
   z-index: 1;
-  height: 40px;
+  height: 90%;
+  padding-left: 15px;
   width: 100%;
   font-size: 14px;
   color: #000000;
-  max-width: 150px;
+  border-radius: 10px;
+  border: none;
+  outline: 0.5px solid rgba(150, 150, 150, 0.5);
+  box-shadow: -1px 15px 15px -5px rgba(0, 0, 0, 0.09);
+  &:focus {
+    outline: 0.5px solid green;
+  }
   &:hover {
-    border-color: orange;
+    outline: 0.5px solid rgba(0, 0, 0, 1);
   }
 `;
 
@@ -53,7 +65,7 @@ const StyledPopup = styled.div`
   z-index: 1;
   position: absolute;
   margin-top: 45px;
-  max-width: 200px;
+  width: 100%;
   background: #ffffff;
   box-shadow: -1px 15px 15px -5px rgba(0, 0, 0, 0.09);
   border-radius: 10px;
@@ -66,6 +78,7 @@ const StyledUL = styled.ul`
   max-height: 300px;
   overflow: scroll;
   overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const StyledLI = styled.li<{ isSelected: boolean }>`
@@ -76,25 +89,6 @@ const StyledLI = styled.li<{ isSelected: boolean }>`
   &:hover {
     background: rgba(254, 95, 30, 0.05);
   }
-`;
-
-const SubstrateLayerDiv = styled.div`
-  z-index: 0;
-  left: 0px;
-  position: absolute;
-  background: #ffffff;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.09);
-  border-radius: 10px;
-  width: 230px;
-  height: 40px;
-`;
-
-const StyledDropdownWrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-content: center;
-  width: 400px;
 `;
 
 interface IOptions {
@@ -114,7 +108,6 @@ const Dropdown = memo(({ value, options, isVisible, onChange, setIsVisible }: ID
   const [query, setQuery] = useState('');
   const option = useMemo(() => options.find((item) => item.id === value), [value, options]);
   const popupRef = useRef<HTMLDivElement>(null);
-  console.log('isVisible', isVisible);
 
   useEffect(() => {
     if (option) {
@@ -135,7 +128,11 @@ const Dropdown = memo(({ value, options, isVisible, onChange, setIsVisible }: ID
 
   const handleClickOutside = (e: Event) => {
     if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-      clearDropdownInput();
+      if (option) {
+        setIsVisible(false);
+      } else {
+        clearDropdownInput();
+      }
     }
   };
 
@@ -186,6 +183,14 @@ const Dropdown = memo(({ value, options, isVisible, onChange, setIsVisible }: ID
         placeholder="Select One"
         onChange={handleSearch}
       />
+      <StyledExpandListButton isOpen={isVisible}>
+        <ArrowDown />
+      </StyledExpandListButton>
+      {value ? (
+        <StyledClearButton onClick={handleClear}>
+          <Clear />
+        </StyledClearButton>
+      ) : null}
       <StyledPopup>
         {isVisible ? (
           <StyledUL>
@@ -204,16 +209,6 @@ const Dropdown = memo(({ value, options, isVisible, onChange, setIsVisible }: ID
           </StyledUL>
         ) : null}
       </StyledPopup>
-      <SubstrateLayerDiv>
-        <StyledExpandListButton isOpen={isVisible}>
-          <ArrowDown />
-        </StyledExpandListButton>
-        {value ? (
-          <StyledClearButton onClick={handleClear}>
-            <Clear />
-          </StyledClearButton>
-        ) : null}
-      </SubstrateLayerDiv>
     </StyledDropdownWrapper>
   );
 });

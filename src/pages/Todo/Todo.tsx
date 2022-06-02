@@ -9,6 +9,7 @@ import Header from '../../components/Header/Header';
 import TodoForm from '../../features/TodoForm/TodoForm';
 import TodoList from '../../features/TodoList/TodoList';
 import FilterPanel from '../../features/FilterPanel/FilterPanel';
+import Table from '../../features/TodoTable/TodoTable';
 
 const StyledShowAllButton = styled(ActionButton)`
   position: absolute;
@@ -69,9 +70,7 @@ const App = () => {
 
   return (
     <>
-      <Header onClick={logout} user={user} />
-
-      <TodoMainDiv>
+      <Header onClick={logout} user={user}>
         <Dropdown
           value={selectedTodoId}
           options={todosOptions}
@@ -79,10 +78,12 @@ const App = () => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
+      </Header>
+
+      <TodoMainDiv>
         <TodoH1>todos</TodoH1>
         <TodoForm />
-        <TodoList selectedTodo={selectedTodoId} todosArr={todosArr} activeFilter={activeFilter} />
-        <FilterPanel todosArr={todosArr} activeFilter={activeFilter} />
+        <Table todos={todosArr} />
       </TodoMainDiv>
     </>
   );
