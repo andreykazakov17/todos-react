@@ -23,11 +23,10 @@ interface ITableRow {
   text: string;
   completed: boolean;
   user: string;
-  setIsOpen: (value: boolean) => void;
-  setTodoId: (value: string | null) => void;
+  onDelete: (value: string | null) => void;
 }
 
-const TodoTableRow = memo(({ id, text, completed, user, setIsOpen, setTodoId }: ITableRow) => (
+const TodoTableRow = memo(({ id, text, completed, user, onDelete }: ITableRow) => (
   <tr>
     <StyledTableData>{text}</StyledTableData>
     <StyledTableData>{`${completed}`}</StyledTableData>
@@ -36,8 +35,7 @@ const TodoTableRow = memo(({ id, text, completed, user, setIsOpen, setTodoId }: 
       <StyledTableTrashButton
         color="error"
         onClick={() => {
-          setIsOpen(true);
-          setTodoId(id);
+          onDelete(id);
         }}
       >
         <TableTrashIcon />

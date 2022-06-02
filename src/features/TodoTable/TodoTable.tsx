@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import TodoTableRow from 'components/TodoTableRow/TodoTableRow';
@@ -31,12 +31,20 @@ interface ITodos {
 
 const Table = memo(({ todos }: ITodos) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [todoId, setTodoId] = useState<string | null>(null);
+  const [todoToRemove, setTodoToRemove] = useState<string | null>(null);
   const dispatch = useDispatch();
 
-  const handleDeleteTodo = () => {
-    dispatch({ type: 'DELETE_TODO', payload: todoId });
-  };
+  const handleDeleteTodo = useCallback(() => {
+    dispatch({ type: 'DELETE_TODO', payload: todoToRemove });
+  }, [todoToRemove]);
+
+  const onDelete = useCallback((id: string | null) => {
+    setIsOpen(true);
+    setTodoToRemove(id);
+  }, []);
+
+  const onDiscardClick = () => setTodoToRemove(null);
+  const onClose = () => setIsOpen(false);
 
   return (
     <>
@@ -57,21 +65,18 @@ const Table = memo(({ todos }: ITodos) => {
               text={item.text}
               completed={item.completed}
               user={item.user}
-              setIsOpen={setIsOpen}
-              setTodoId={setTodoId}
+              onDelete={onDelete}
             />
           ))}
         </tbody>
       </StyledTable>
-      {isOpen && (
-        <Modal
-          id={todoId}
-          title="Are you sure want to delete this item?"
-          onClose={setIsOpen}
-          onConfirmClick={handleDeleteTodo}
-          onDiscardClick={setTodoId}
-        />
-      )}
+      <Modal
+        isOpen={isOpen}
+        title="Are you sure want to delete this item?"
+        onClose={onClose}
+        onConfirmClick={handleDeleteTodo}
+        onDiscardClick={onDiscardClick}
+      />
     </>
   );
 });

@@ -78,6 +78,7 @@ const StyledUL = styled.ul`
   max-height: 300px;
   overflow: scroll;
   overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const StyledLI = styled.li<{ isSelected: boolean }>`

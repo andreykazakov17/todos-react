@@ -83,8 +83,6 @@ const App = () => {
       <TodoMainDiv>
         <TodoH1>todos</TodoH1>
         <TodoForm />
-        {/* <TodoList selectedTodo={selectedTodoId} todosArr={todosArr} activeFilter={activeFilter} />
-        <FilterPanel todosArr={todosArr} activeFilter={activeFilter} /> */}
         <Table todos={todosArr} />
       </TodoMainDiv>
     </>

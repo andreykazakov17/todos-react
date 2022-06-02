@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 import ActionButton from '../Button/Button';
@@ -77,43 +77,47 @@ const StyledModalText = styled.div`
 `;
 
 interface IModalProps {
-  id: string | null;
   title: string;
-  onClose: (value: boolean) => void;
-  onConfirmClick: (value: string | null) => void;
-  onDiscardClick: (value: string | null) => void;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirmClick: () => void;
+  onDiscardClick: () => void;
 }
 
-const Modal = ({ id, title, onClose, onConfirmClick, onDiscardClick }: IModalProps) => (
-  <StyledModalBackground>
-    <StyledModalBody onClick={(e) => e.stopPropagation()}>
-      <StyledCloseModalButton
-        color="error"
-        onClick={() => {
-          onClose(false);
-          onDiscardClick(null);
-        }}
-      >
-        X
-      </StyledCloseModalButton>
-      <StyledModalTitle>{title}</StyledModalTitle>
-      <StyledModalText>This will remove the given element permanently</StyledModalText>
-      <StyledButtonWrapper>
-        <ActionButton color="secondary" onClick={() => onClose(false)}>
-          Cancel
-        </ActionButton>
-        <ActionButton
-          color="error"
-          onClick={() => {
-            onConfirmClick(id);
-            onClose(false);
-          }}
-        >
-          Delete
-        </ActionButton>
-      </StyledButtonWrapper>
-    </StyledModalBody>
-  </StyledModalBackground>
+const Modal = ({ title, isOpen, onClose, onConfirmClick, onDiscardClick }: IModalProps) => (
+  <div>
+    {isOpen && (
+      <StyledModalBackground>
+        <StyledModalBody onClick={(e) => e.stopPropagation()}>
+          <StyledCloseModalButton
+            color="error"
+            onClick={() => {
+              onClose();
+              onDiscardClick();
+            }}
+          >
+            X
+          </StyledCloseModalButton>
+          <StyledModalTitle>{title}</StyledModalTitle>
+          <StyledModalText>This will remove the given element permanently</StyledModalText>
+          <StyledButtonWrapper>
+            <ActionButton color="secondary" onClick={() => onClose()}>
+              Cancel
+            </ActionButton>
+            <ActionButton
+              color="error"
+              onClick={() => {
+                onConfirmClick();
+                onClose();
+              }}
+            >
+              Delete
+            </ActionButton>
+          </StyledButtonWrapper>
+        </StyledModalBody>
+      </StyledModalBackground>
+    )}
+  </div>
 );
 
 export default Modal;
