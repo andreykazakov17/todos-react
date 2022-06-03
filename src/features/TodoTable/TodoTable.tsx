@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import TodoTableRow from 'components/TodoTableRow/TodoTableRow';
 import { ITodo } from 'types/todo';
+import TodoTableRow from 'components/TodoTableRow/TodoTableRow';
 import Modal from 'components/Modal/Modal';
-import { useDispatch } from 'react-redux';
+import Pagination from '../../components/Pagination/Pagination';
 
 const StyledTable = styled.table`
-  position: relative;
   width: 70%;
   margin: 0 auto;
   margin-bottom: 20px;
@@ -25,14 +25,26 @@ const StyledTH = styled.th`
   border-bottom: 5px solid #f2f8f8;
 `;
 
+const StyledWrapper = styled.div`
+  position: relative;
+  height: 350px;
+`;
+
 interface ITodos {
   todos: ITodo[];
 }
 
 const Table = memo(({ todos }: ITodos) => {
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [todoToRemove, setTodoToRemove] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [todosPerPage] = useState<number>(5);
+
+  const indexOfLastTodo = currentPage * todosPerPage;
+  const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+  const currentTodos = todos.slice(indexOfFirstTodo, indexOfLastTodo);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const handleDeleteTodo = useCallback(() => {
     dispatch({ type: 'DELETE_TODO', payload: todoToRemove });
@@ -47,7 +59,7 @@ const Table = memo(({ todos }: ITodos) => {
   const onClose = () => setIsOpen(false);
 
   return (
-    <>
+    <StyledWrapper>
       <StyledTable>
         <thead>
           <tr>
@@ -58,7 +70,7 @@ const Table = memo(({ todos }: ITodos) => {
           </tr>
         </thead>
         <tbody>
-          {todos.map((item) => (
+          {currentTodos.map((item) => (
             <TodoTableRow
               key={item.id}
               id={item.id}
@@ -77,7 +89,13 @@ const Table = memo(({ todos }: ITodos) => {
         onConfirmClick={handleDeleteTodo}
         onDiscardClick={onDiscardClick}
       />
-    </>
+      <Pagination
+        currentPage={currentPage}
+        itemsPerPage={todosPerPage}
+        itemsLength={todos.length}
+        paginate={paginate}
+      />
+    </StyledWrapper>
   );
 });
 export default Table;

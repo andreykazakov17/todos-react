@@ -19,7 +19,7 @@ const StyledShowAllButton = styled(ActionButton)`
 `;
 
 const TodoMainDiv = styled.div`
-  min-height: 100vh;
+  min-height: 90vh;
   font-family: 'Roboto', sans-serif;
   background-color: rgb(255, 255, 255);
 `;
